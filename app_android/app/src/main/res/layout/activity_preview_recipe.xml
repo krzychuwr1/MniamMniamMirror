@@ -44,48 +44,12 @@
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="0dp" />
 
-                <LinearLayout
-                    android:id="@+id/star_score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/title"
-                    android:layout_marginBottom="10sp">
+                <include layout="@layout/star_score"
 
-                    <ImageView
-                        android:id="@+id/star1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star_rate_black"
-                        android:tint="@color/yellow" />
+                    >
 
-                    <ImageView
-                        android:id="@+id/star2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star_rate_black"
-                        android:tint="@color/yellow" />
 
-                    <ImageView
-                        android:id="@+id/star3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star_rate_black"
-                        android:tint="@color/yellow" />
-
-                    <ImageView
-                        android:id="@+id/star4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star_rate_black"
-                        android:tint="@color/yellow" />
-
-                    <ImageView
-                        android:id="@+id/star5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star_rate_black"
-                        android:tint="@color/yellow" />
-                </LinearLayout>
+                </include>
 
                 <LinearLayout
                     android:id="@+id/author_layout"
