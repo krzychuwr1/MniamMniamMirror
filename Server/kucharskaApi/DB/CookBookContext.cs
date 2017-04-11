@@ -13,7 +13,5 @@ namespace kucharskaApi.DB
         {
 
         }
-
-        public DbSet<Recipe> Recipes { get; set; }
     }
 }

@@ -5,7 +5,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CC3AAE34-2228-4894-9C3D-8001BCFD2D4F}</ProjectGuid>
+    <ProjectGuid>{EEF97D22-FC18-41B0-8D64-40D9299788AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>kucharskaApi.Tests</RootNamespace>
@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Controllers\ValuesControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -101,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\kucharskaApi\kucharskaApi.csproj">
-      <Project>{3B6A1EBD-82BE-40C5-824A-65677C801702}</Project>
+      <Project>{BC86E250-19C5-4AE4-A703-8C54C26A5264}</Project>
       <Name>kucharskaApi</Name>
     </ProjectReference>
   </ItemGroup>

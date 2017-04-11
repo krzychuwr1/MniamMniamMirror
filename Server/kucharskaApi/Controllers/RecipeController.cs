@@ -25,7 +25,7 @@ namespace kucharskaApi.Controllers
         [ResponseType(typeof(IEnumerable<Recipe>))]
         public IHttpActionResult Read()
         {
-            using (var db = new CookBookContext())
+            using (var db = new ApplicationDbContext())
             {
                 return Ok(db.Recipes.ToList());
             }
@@ -41,7 +41,7 @@ namespace kucharskaApi.Controllers
         [ResponseType(typeof(Recipe))]
         public IHttpActionResult Read(int id)
         {
-            using (var db = new CookBookContext())
+            using (var db = new ApplicationDbContext())
             {
                 return Ok(db.Recipes.FirstOrDefault(recipe => recipe.RecipeId == id));
             }
@@ -58,7 +58,7 @@ namespace kucharskaApi.Controllers
         [ActionName(nameof(Update))]
         public IHttpActionResult Update([FromBody]Recipe recipe)
         {
-            using (var db = new CookBookContext())
+            using (var db = new ApplicationDbContext())
             {
                 if(recipe.RecipeId == 0)
                 {
@@ -91,7 +91,7 @@ namespace kucharskaApi.Controllers
         [ActionName(nameof(Delete))]
         public IHttpActionResult Delete([FromBody]int id)
         {
-            using (var db = new CookBookContext())
+            using (var db = new ApplicationDbContext())
             {
                 var recipe = db.Recipes.FirstOrDefault(rec => rec.RecipeId == id);
                 if(recipe != null)
