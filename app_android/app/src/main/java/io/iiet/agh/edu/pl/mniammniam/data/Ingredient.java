@@ -4,16 +4,16 @@ package io.iiet.agh.edu.pl.mniammniam.data;
  * Created by Krzychu on 11.04.2017.
  */
 
-public class Ingredient {
-    int mQuantity;
-    String name;
-    String unit;
+class Ingredient {
+    private int mQuantity;
+    private String name;
+    private String unit;
 
-    public int getmQuantity() {
+    public int getQuantity() {
         return mQuantity;
     }
 
-    public void setmQuantity(int mQuantity) {
+    public void setQuantity(int mQuantity) {
         this.mQuantity = mQuantity;
     }
 

@@ -11,15 +11,15 @@ import java.util.Set;
  */
 
 public class Recipe {
-    ArrayList<Ingredient> mIngredients;
-    Set<String> mTags;
-    String mTitle;
-    int mNumberOfPeople;
-    int mStarScore;
-    ArrayList<String>mSteps;
+    private ArrayList<Ingredient> mIngredients;
+    private Set<String> mTags;
+    private String mTitle;
+    private int mNumberOfPeople;
+    private int mStarScore;
+    private ArrayList<String> mSteps;
 
-    public Recipe(ArrayList<Ingredient> mIngredience, Set<String> mTags, String mTitle, int mNumberOfPeople, int mStarScore, ArrayList<String> mSteps) {
-        this.mIngredients = mIngredience;
+    public Recipe(ArrayList<Ingredient> mIngredients, Set<String> mTags, String mTitle, int mNumberOfPeople, int mStarScore, ArrayList<String> mSteps) {
+        this.mIngredients = mIngredients;
         this.mTags = mTags;
         this.mTitle = mTitle;
         this.mNumberOfPeople = mNumberOfPeople;
@@ -31,7 +31,7 @@ public class Recipe {
         return mIngredients;
     }
 
-    public void setIngredience(ArrayList<Ingredient> mIngredients) {
+    public void setIngredients(ArrayList<Ingredient> mIngredients) {
         this.mIngredients = mIngredients;
     }
 
@@ -75,14 +75,15 @@ public class Recipe {
         this.mSteps = mSteps;
     }
 
-    public void addStep(String step){
+    public void addStep(String step) {
         mSteps.add(step);
     }
 
-    public void addTag(String tag){
+    public void addTag(String tag) {
         mSteps.add(tag);
     }
-    public void addIngredient(Ingredient ingredient){
+
+    public void addIngredient(Ingredient ingredient) {
         mIngredients.add(ingredient);
     }
 
