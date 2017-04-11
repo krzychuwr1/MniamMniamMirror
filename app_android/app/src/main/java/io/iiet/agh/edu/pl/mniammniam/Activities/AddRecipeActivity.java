@@ -1,9 +1,11 @@
-package io.iiet.agh.edu.pl.mniammniam;
+package io.iiet.agh.edu.pl.mniammniam.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.TextView;
+
+import io.iiet.agh.edu.pl.mniammniam.R;
 
 public class AddRecipeActivity extends AppCompatActivity {
 

@@ -2,6 +2,7 @@ package io.iiet.agh.edu.pl.mniammniam.data;
 
 import android.util.Pair;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +15,25 @@ public class Recipe {
     private ArrayList<Ingredient> mIngredients;
     private Set<String> mTags;
     private String mTitle;
+    private String mAuthor;
+    private URI mImageUri;
+
+    public String getmAuthor() {
+        return mAuthor;
+    }
+
+    public void setmAuthor(String mAuthor) {
+        this.mAuthor = mAuthor;
+    }
+
+    public URI getmImageUri() {
+        return mImageUri;
+    }
+
+    public void setmImageUri(URI mImageUri) {
+        this.mImageUri = mImageUri;
+    }
+
     private int mNumberOfPeople;
     private int mStarScore;
     private ArrayList<String> mSteps;
@@ -43,7 +63,7 @@ public class Recipe {
         this.mTags = mTags;
     }
 
-    public String getmTitle() {
+    public String getTitle() {
         return mTitle;
     }
 
