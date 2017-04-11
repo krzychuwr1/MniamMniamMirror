@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/recipe_image"
-                android:layout_width="200sp"
-                android:layout_height="200sp"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
                 android:layout_margin="10sp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/placeholder"
@@ -30,7 +30,7 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10sp"
                 android:layout_toEndOf="@+id/recipe_image">
 
@@ -45,10 +45,53 @@
                     tools:layout_editor_absoluteY="0dp" />
 
                 <LinearLayout
+                    android:id="@+id/star_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/title"
+                    android:layout_marginBottom="10sp">
+
+                    <ImageView
+                        android:id="@+id/star1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/star_rate_black"
+                        android:tint="@color/yellow" />
+
+                    <ImageView
+                        android:id="@+id/star2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/star_rate_black"
+                        android:tint="@color/yellow" />
+
+                    <ImageView
+                        android:id="@+id/star3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/star_rate_black"
+                        android:tint="@color/yellow" />
+
+                    <ImageView
+                        android:id="@+id/star4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/star_rate_black"
+                        android:tint="@color/yellow" />
+
+                    <ImageView
+                        android:id="@+id/star5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/star_rate_black"
+                        android:tint="@color/yellow" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/author_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/title">
+                    android:layout_below="@+id/star_score">
 
                     <TextView
                         android:layout_width="wrap_content"
