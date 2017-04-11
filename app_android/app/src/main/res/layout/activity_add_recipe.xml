@@ -20,8 +20,8 @@
 
             <ImageView
                 android:id="@+id/recipe_image"
-                android:layout_width="200sp"
-                android:layout_height="200sp"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
                 android:layout_margin="10sp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/placeholder"
@@ -30,7 +30,7 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10sp"
                 android:layout_toRightOf="@+id/recipe_image">
 
@@ -62,7 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10sp"
-                        android:text="Jonny Smith"
+                        android:hint="Jonny Smith"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -84,17 +84,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10sp"
-                        android:text="X"
+                        android:hint="X"
                         android:textSize="12sp" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView
+                    android:id="@+id/tag_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/layout_number_of_people"
                     android:orientation="horizontal">
 
                 </android.support.v7.widget.RecyclerView>
+
+                <EditText
+                    android:id="@+id/add_tag"
+                    android:layout_below="@id/tag_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10sp"
+                    android:hint="Add tag"
+                    android:textSize="12sp" />
 
 
             </RelativeLayout>
@@ -122,7 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5sp"
-            android:text="Add ingredient"
+            android:hint="Add ingredient"
             android:textSize="16sp" />
 
         <TextView
@@ -144,7 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5sp"
-            android:text="Add step"
+            android:hint="Add step"
             android:textSize="16sp" />
 
     </LinearLayout>

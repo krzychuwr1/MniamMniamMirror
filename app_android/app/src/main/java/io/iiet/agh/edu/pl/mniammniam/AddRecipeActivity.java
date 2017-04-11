@@ -12,7 +12,6 @@ public class AddRecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
-        mTitle= (TextView) findViewById(R.id.tv_recipe_title);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
