@@ -8,9 +8,10 @@ using MniamMniam.Data;
 namespace MniamMniam.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170414215110_AddRecipe")]
+    partial class AddRecipe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -178,19 +179,19 @@ namespace MniamMniam.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<int>("ApplicationUserId");
+
+                    b.Property<string>("ApplicationUserId1");
 
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("Text");
-
                     b.Property<DateTime>("UpdatedAt");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("ApplicationUserId1");
 
                     b.ToTable("Recipes");
                 });
@@ -236,7 +237,7 @@ namespace MniamMniam.Data.Migrations
                 {
                     b.HasOne("MniamMniam.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Recipes")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId1");
                 });
         }
     }

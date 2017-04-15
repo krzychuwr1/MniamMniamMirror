@@ -8,9 +8,10 @@ using MniamMniam.Data;
 namespace MniamMniam.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170414221247_fixRecipeUserId")]
+    partial class fixRecipeUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -183,8 +184,6 @@ namespace MniamMniam.Data.Migrations
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Name");
-
-                    b.Property<string>("Text");
 
                     b.Property<DateTime>("UpdatedAt");
 

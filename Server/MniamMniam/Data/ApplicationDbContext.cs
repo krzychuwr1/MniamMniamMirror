@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MniamMniam.Models;
+using MniamMniam.Models.CookBookModels;
 
 namespace MniamMniam.Data
 {
@@ -14,6 +15,8 @@ namespace MniamMniam.Data
             : base(options)
         {
         }
+
+        public DbSet<Recipe> Recipes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
