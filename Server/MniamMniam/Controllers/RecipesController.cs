@@ -9,6 +9,7 @@ using MniamMniam.Data;
 using MniamMniam.Models.CookBookModels;
 using Microsoft.AspNetCore.Identity;
 using MniamMniam.Models;
+using AutoMapper;
 
 namespace MniamMniam.Controllers
 {
