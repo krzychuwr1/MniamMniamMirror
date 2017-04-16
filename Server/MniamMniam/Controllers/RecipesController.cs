@@ -35,6 +35,15 @@ namespace MniamMniam.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> MyRecipes()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var recipes = _context.Recipes
+                .Where(rec => rec.ApplicationUserId ==userId)
+                .Include(r => r.ApplicationUser);
+            return View(await recipes.ToListAsync());
+        }
+
         // GET: Recipes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
