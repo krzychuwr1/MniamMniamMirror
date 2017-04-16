@@ -19,10 +19,13 @@ namespace MniamMniam.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private readonly IMapper _mapper;
+
+        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         // GET: Recipes
@@ -107,6 +110,10 @@ namespace MniamMniam.Controllers
             {
                 return NotFound();
             }
+
+            var oldRecipe = _context.Recipes.Find(id);
+
+            recipe = _mapper.Map(recipe, oldRecipe);
 
             if (ModelState.IsValid)
             {
