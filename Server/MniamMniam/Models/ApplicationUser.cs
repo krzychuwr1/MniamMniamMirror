@@ -10,5 +10,7 @@ namespace MniamMniam.Models
     public class ApplicationUser : IdentityUser
     {
         public List<Recipe> Recipes { get; set; }
+
+        public List<Review> Reviews { get; set; }
     }
 }

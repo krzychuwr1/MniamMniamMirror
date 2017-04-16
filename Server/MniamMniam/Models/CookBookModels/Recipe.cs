@@ -28,5 +28,7 @@ namespace MniamMniam.Models.CookBookModels
 
         [Display(Name="Owner")]
         public ApplicationUser ApplicationUser { get; set; }
+
+        public List<Review> Reviews { get; set; }
     }
 }
