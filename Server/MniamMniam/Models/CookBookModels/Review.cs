@@ -26,5 +26,10 @@ namespace MniamMniam.Models.CookBookModels
         public int ApplicationUserId { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
+
+        [ScaffoldColumn(false)]
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
     }
 }
