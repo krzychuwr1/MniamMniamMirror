@@ -54,6 +54,7 @@ namespace MniamMniam.Controllers
 
             var recipe = await _context.Recipes
                 .Include(r => r.ApplicationUser)
+                .Include(r => r.Reviews)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (recipe == null)
             {
