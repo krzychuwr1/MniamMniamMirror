@@ -39,7 +39,7 @@
 <h2>Reviews</h2>
 
 <p>
-    <a asp-controller="Reviews" asp-action="Create">Create New review</a>
+    <a asp-controller="Reviews" asp-action="Create" asp-route-recipeId="@Model.Id">Create New review</a>
 </p>
 <table class="table">
     <thead>

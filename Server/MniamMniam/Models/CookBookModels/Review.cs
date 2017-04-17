@@ -23,7 +23,7 @@ namespace MniamMniam.Models.CookBookModels
         public Recipe Recipe { get; set; }
 
         [ScaffoldColumn(false)]
-        public int ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; }
 
         public ApplicationUser ApplicationUser { get; set; }
 

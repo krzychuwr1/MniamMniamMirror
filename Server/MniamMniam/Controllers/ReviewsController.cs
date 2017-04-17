@@ -16,7 +16,7 @@ namespace MniamMniam.Controllers
 
         public ReviewsController(ApplicationDbContext context)
         {
-            _context = context;    
+            _context = context;
         }
 
         // GET: Reviews
@@ -46,10 +46,23 @@ namespace MniamMniam.Controllers
         }
 
         // GET: Reviews/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create(int recipeId)
         {
-            ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id");
-            return View();
+            var recipe = await 
+                _context.Recipes
+                .Include(rec => rec.ApplicationUser)
+                .FirstOrDefaultAsync(rec => rec.Id == recipeId);
+
+            if(recipe != null)
+            {
+                ViewData["RecipeId"] = recipe.Id;
+                return View();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         // POST: Reviews/Create
@@ -57,13 +70,23 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Score,Text")] Review review)
+        public async Task<IActionResult> Create(int recipeId, [Bind("Score,Text")] Review review)
         {
             if (ModelState.IsValid)
             {
+                var recipe = await
+                    _context.Recipes
+                    .Include(rec => rec.ApplicationUser)
+                    .FirstOrDefaultAsync(rec => rec.Id == recipeId);
+
+                review.ApplicationUserId = recipe.ApplicationUserId;
+                review.RecipeId = recipe.Id;
+                review.CreatedAt = DateTime.Now;
+                review.UpdatedAt = DateTime.Now;
+
                 _context.Add(review);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Recipes", new { id = recipeId });
             }
             ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id", review.RecipeId);
             return View(review);
