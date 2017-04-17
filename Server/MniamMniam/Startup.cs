@@ -20,6 +20,8 @@ namespace MniamMniam
 {
     public class Startup
     {
+        private readonly IHostingEnvironment environment;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -32,6 +34,8 @@ namespace MniamMniam
                 // For more details on using the user secret store see https://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets<Startup>();
             }
+
+            environment = env;
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -50,12 +54,26 @@ namespace MniamMniam
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc(options =>
+            
+            if(environment.IsDevelopment())
             {
-                options.SslPort = 44366;
-                options.Filters.Add(new RequireHttpsAttribute());
+                services.AddMvc(options =>
+                    {
+                        options.SslPort = 44366;
+                        options.Filters.Add(new RequireHttpsAttribute());
+                    }
+                );
             }
-            );
+            else
+            {
+                services.AddMvc(options =>
+                {
+                    options.SslPort = 443;
+                    options.Filters.Add(new RequireHttpsAttribute());
+                    }
+                );
+            }
+            
 
             services.AddAutoMapper(typeof(Startup));
 
