@@ -57,7 +57,7 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Score,Text,UpdatedAt")] Review review)
+        public async Task<IActionResult> Create([Bind("Score,Text")] Review review)
         {
             if (ModelState.IsValid)
             {
