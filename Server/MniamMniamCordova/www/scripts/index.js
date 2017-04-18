@@ -15,6 +15,7 @@
         bkpLink.setAttribute("href", targetUrl);
         bkpLink.text = targetUrl;
         window.location.replace(targetUrl);
+        //cordova.InAppBrowser.open(targetUrl, '_system', 'toolbar=no, location=no');
     },
     // Note: This code is taken from the Cordova CLI template.
     receivedEvent: function (id) {
