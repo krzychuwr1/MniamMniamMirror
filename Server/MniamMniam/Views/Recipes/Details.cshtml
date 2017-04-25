@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+@{var averageScore = Model.Reviews.Select(p => p.Score).DefaultIfEmpty().Average(); }
 <h2>Details</h2>
 
 <div>
@@ -27,6 +27,12 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ApplicationUser.UserName)
+        </dd>
+        <dt>
+            Score Average
+        </dt>
+        <dd>
+            @averageScore
         </dd>
     </dl>
 </div>
