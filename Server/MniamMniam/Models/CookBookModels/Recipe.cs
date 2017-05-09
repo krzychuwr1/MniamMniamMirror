@@ -36,5 +36,7 @@ namespace MniamMniam.Models.CookBookModels
         public List<FavouriteRecipe> Favourites { get; set; }
 
         public List<RecipeIngredient> Ingredients { get; set; }
+
+        public List<RecipeTag> Tags { get; set; }
     }
 }

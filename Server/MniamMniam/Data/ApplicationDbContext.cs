@@ -28,6 +28,10 @@ namespace MniamMniam.Data
 
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
 
+        public DbSet<Tag> Tags { get; set; }
+
+        public DbSet<RecipeTag> RecipeTags { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
