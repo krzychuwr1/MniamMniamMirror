@@ -30,5 +30,13 @@ namespace MniamMniam.Models.CookBookModels
         public ApplicationUser ApplicationUser { get; set; }
 
         public List<Review> Reviews { get; set; }
+
+        public List<RecipeAvailability> Availabilities { get; set; }
+
+        public List<FavouriteRecipe> Favourites { get; set; }
+
+        public List<RecipeIngredient> Ingredients { get; set; }
+
+        public List<RecipeTag> Tags { get; set; }
     }
 }

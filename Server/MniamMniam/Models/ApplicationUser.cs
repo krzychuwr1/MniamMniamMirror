@@ -12,5 +12,9 @@ namespace MniamMniam.Models
         public List<Recipe> Recipes { get; set; }
 
         public List<Review> Reviews { get; set; }
+
+        public List<RecipeAvailability> AvailableRecipes { get; set; }
+
+        public List<FavouriteRecipe> FavouriteRecipes { get; set; } 
     }
 }

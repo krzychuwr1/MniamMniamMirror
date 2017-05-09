@@ -8,9 +8,10 @@ using MniamMniam.Data;
 namespace MniamMniam.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170509231010_ingredients")]
+    partial class ingredients
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -256,35 +257,13 @@ namespace MniamMniam.Data.Migrations
 
                     b.Property<int>("RecipeId");
 
-                    b.Property<int?>("TagId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IngredientId");
 
                     b.HasIndex("RecipeId");
-
-                    b.HasIndex("TagId");
 
                     b.ToTable("RecipeIngredients");
-                });
-
-            modelBuilder.Entity("MniamMniam.Models.CookBookModels.RecipeTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("IngredientId");
-
-                    b.Property<int>("RecipeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IngredientId");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("RecipeTags");
                 });
 
             modelBuilder.Entity("MniamMniam.Models.CookBookModels.Review", b =>
@@ -311,18 +290,6 @@ namespace MniamMniam.Data.Migrations
                     b.HasIndex("RecipeId");
 
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("MniamMniam.Models.CookBookModels.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -402,23 +369,6 @@ namespace MniamMniam.Data.Migrations
 
                     b.HasOne("MniamMniam.Models.CookBookModels.Recipe", "Recipe")
                         .WithMany("Ingredients")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MniamMniam.Models.CookBookModels.Tag")
-                        .WithMany("Recipes")
-                        .HasForeignKey("TagId");
-                });
-
-            modelBuilder.Entity("MniamMniam.Models.CookBookModels.RecipeTag", b =>
-                {
-                    b.HasOne("MniamMniam.Models.CookBookModels.Ingredient", "Ingredient")
-                        .WithMany()
-                        .HasForeignKey("IngredientId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("MniamMniam.Models.CookBookModels.Recipe", "Recipe")
-                        .WithMany("Tags")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
