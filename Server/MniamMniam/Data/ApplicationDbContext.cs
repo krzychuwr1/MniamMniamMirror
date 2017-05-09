@@ -20,6 +20,10 @@ namespace MniamMniam.Data
 
         public DbSet<Review> Reviews { get; set; }
 
+        public DbSet<RecipeAvailability> RecipesAvailabilities { get; set; }
+
+        public DbSet<FavouriteRecipe> FavouriteRecipes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
