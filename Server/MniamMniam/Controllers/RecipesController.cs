@@ -35,6 +35,13 @@ namespace MniamMniam.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [HttpGet("Recipes/?name={name}")]
+        public async Task<IActionResult> Index(string name)
+        {
+            var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(name)).Include(r => r.ApplicationUser);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
         public async Task<IActionResult> MyRecipes()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
