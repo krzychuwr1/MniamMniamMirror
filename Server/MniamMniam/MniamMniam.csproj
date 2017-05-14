@@ -12,6 +12,10 @@
     <UserSecretsId>aspnet-MniamMniam-8d21e356-17e5-495f-90a9-14180d669ed1</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\MniamMniam - Web Deploy.pubxml" />
   </ItemGroup>

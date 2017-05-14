@@ -38,7 +38,7 @@ namespace MniamMniam.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string Name)
         {
-            if(Name is null)
+            if(Name == null)
             {
                 return await Index();
             }
