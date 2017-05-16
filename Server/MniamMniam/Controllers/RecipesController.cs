@@ -10,6 +10,7 @@ using MniamMniam.Models.CookBookModels;
 using Microsoft.AspNetCore.Identity;
 using MniamMniam.Models;
 using AutoMapper;
+using MniamMniam.ViewModels;
 
 namespace MniamMniam.Controllers
 {
@@ -87,14 +88,17 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Text")] Recipe recipe)
+        public async Task<IActionResult> Create([Bind("Name,Text")] CreateRecipeViewModel recipeViewModel)
         {
+            var recipe = new Recipe();
             if (ModelState.IsValid)
             {
                 recipe.ApplicationUserId = _userManager.GetUserId(HttpContext.User);
                 var now = DateTime.Now;
                 recipe.CreatedAt = now;
                 recipe.UpdatedAt = now;
+                recipe.Name = recipeViewModel.Name;
+                recipe.Text = recipeViewModel.Text;
                 _context.Add(recipe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
