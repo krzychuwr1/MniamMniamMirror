@@ -67,6 +67,7 @@ namespace MniamMniam.Controllers
             var recipe = await _context.Recipes
                 .Include(r => r.ApplicationUser)
                 .Include(r => r.Reviews)
+                .Include(r => r.Tags)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (recipe == null)
             {
@@ -82,7 +83,7 @@ namespace MniamMniam.Controllers
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View(new CreateRecipeViewModel()
             {
-                AllTags = _context.Tags.Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Name })
+                AllTags = _context.Tags.ToList().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() })
             }
             );
         }
@@ -103,7 +104,11 @@ namespace MniamMniam.Controllers
                 recipe.UpdatedAt = now;
                 recipe.Name = recipeViewModel.Name;
                 recipe.Text = recipeViewModel.Text;
-                _context.Add(recipe);
+
+                var tags = _context.Tags.Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
+                recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
+
+                _context.Recipes.Add(recipe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

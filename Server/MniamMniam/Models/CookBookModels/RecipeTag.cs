@@ -9,9 +9,9 @@ namespace MniamMniam.Models.CookBookModels
     {
         public int Id { get; set; }
 
-        public int IngredientId { get; set; }
+        public int TagId { get; set; }
 
-        public Ingredient Ingredient { get; set; }
+        public Tag Tag{ get; set; }
 
         public int RecipeId { get; set; }
 

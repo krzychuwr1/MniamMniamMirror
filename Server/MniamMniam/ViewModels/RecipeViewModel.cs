@@ -13,9 +13,8 @@ namespace MniamMniam.ViewModels
 
         public string Text { get; set; }
 
-        public IEnumerable<SelectListItem> AllTags { get; set; }
+        public int[] SelectedTags { get; set; }
 
-        public List<int> SelectedTags { get; set; } = new List<int>();
-        
+        public IEnumerable<SelectListItem> AllTags { get; set; }
     }
 }

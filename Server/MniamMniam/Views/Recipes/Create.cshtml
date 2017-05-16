@@ -24,9 +24,12 @@
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
-            @Html.ListBoxFor(model => model.SelectedTags, Model.AllTags)
-        </div>
+
+    <label>Lucky Employee</label>
+    <select asp-for="SelectedTags" multiple="multiple" asp-items="@Model.AllTags">
+        <option>Please select one</option>
+    </select>
+    
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
