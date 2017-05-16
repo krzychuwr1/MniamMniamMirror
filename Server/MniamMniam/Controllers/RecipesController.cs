@@ -32,7 +32,9 @@ namespace MniamMniam.Controllers
         // GET: Recipes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Recipes.Include(r => r.ApplicationUser);
+            var applicationDbContext = _context.Recipes
+                .Include(r => r.ApplicationUser)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -43,7 +45,9 @@ namespace MniamMniam.Controllers
             {
                 return await Index();
             }
-            var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(Name)).Include(r => r.ApplicationUser);
+            var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(Name))
+                .Include(r => r.ApplicationUser)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -51,8 +55,9 @@ namespace MniamMniam.Controllers
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             var recipes = _context.Recipes
-                .Where(rec => rec.ApplicationUserId ==userId)
-                .Include(r => r.ApplicationUser);
+                .Where(rec => rec.ApplicationUserId == userId)
+                .Include(r => r.ApplicationUser)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
             return View(await recipes.ToListAsync());
         }
 
@@ -67,6 +72,7 @@ namespace MniamMniam.Controllers
             var recipe = await _context.Recipes
                 .Include(r => r.ApplicationUser)
                 .Include(r => r.Reviews)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (recipe == null)
             {
@@ -80,7 +86,11 @@ namespace MniamMniam.Controllers
         public IActionResult Create()
         {
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            return View(new CreateRecipeViewModel()
+            {
+                AllTags = _context.Tags.ToList().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() })
+            }
+            );
         }
 
         // POST: Recipes/Create
@@ -88,7 +98,7 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Text")] CreateRecipeViewModel recipeViewModel)
+        public async Task<IActionResult> Create(CreateRecipeViewModel recipeViewModel)
         {
             var recipe = new Recipe();
             if (ModelState.IsValid)
@@ -99,7 +109,11 @@ namespace MniamMniam.Controllers
                 recipe.UpdatedAt = now;
                 recipe.Name = recipeViewModel.Name;
                 recipe.Text = recipeViewModel.Text;
-                _context.Add(recipe);
+
+                var tags = _context.Tags.Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
+                recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
+
+                _context.Recipes.Add(recipe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
