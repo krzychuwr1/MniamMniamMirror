@@ -32,7 +32,9 @@ namespace MniamMniam.Controllers
         // GET: Recipes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Recipes.Include(r => r.ApplicationUser);
+            var applicationDbContext = _context.Recipes
+                .Include(r => r.ApplicationUser)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -43,7 +45,9 @@ namespace MniamMniam.Controllers
             {
                 return await Index();
             }
-            var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(Name)).Include(r => r.ApplicationUser);
+            var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(Name))
+                .Include(r => r.ApplicationUser)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -51,8 +55,9 @@ namespace MniamMniam.Controllers
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             var recipes = _context.Recipes
-                .Where(rec => rec.ApplicationUserId ==userId)
-                .Include(r => r.ApplicationUser);
+                .Where(rec => rec.ApplicationUserId == userId)
+                .Include(r => r.ApplicationUser)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
             return View(await recipes.ToListAsync());
         }
 
@@ -67,7 +72,7 @@ namespace MniamMniam.Controllers
             var recipe = await _context.Recipes
                 .Include(r => r.ApplicationUser)
                 .Include(r => r.Reviews)
-                .Include(r => r.Tags)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (recipe == null)
             {

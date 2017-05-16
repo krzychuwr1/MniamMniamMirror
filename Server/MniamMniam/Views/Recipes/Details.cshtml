@@ -23,6 +23,12 @@
             @Html.DisplayFor(model => model.Text)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.Tags)
+        </dt>
+        <dd>
+            @string.Join(" ", Model.Tags.Select(tag => tag.Tag.Name))
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.ApplicationUser)
         </dt>
         <dd>
