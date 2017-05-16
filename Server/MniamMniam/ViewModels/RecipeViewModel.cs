@@ -15,6 +15,20 @@ namespace MniamMniam.ViewModels
 
         public int[] SelectedTags { get; set; }
 
+        public int? SelectedIngredient1 { get; set; }
+
+        public int? SelectedIngredient2 { get; set; }
+
+        public int? SelectedIngredient3 { get; set; }
+
+        public int? SelectedIngredientAmount1 { get; set; }
+
+        public int? SelectedIngredientAmount2 { get; set; }
+
+        public int? SelectedIngredientAmount3 { get; set; }
+
         public IEnumerable<SelectListItem> AllTags { get; set; }
+
+        public IEnumerable<SelectListItem> AllIngredients { get; set; }
     }
 }
