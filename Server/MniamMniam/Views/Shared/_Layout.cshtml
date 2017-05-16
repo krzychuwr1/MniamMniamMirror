@@ -1,5 +1,4 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
-@inject SignInManager<ApplicationUser> SignInManager
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,15 +35,6 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-@if (SignInManager.IsSignedIn(User))
-{
-                    <li>
-                        <a asp-area="" asp-controller="Tags" asp-action="Index" title="Tags">Tags</a>
-                    </li>
-                    <li>
-                        <a asp-area="" asp-controller="Ingredients" asp-action="Index" title="Ingredients">Ingredients</a>
-                    </li>
-}
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
