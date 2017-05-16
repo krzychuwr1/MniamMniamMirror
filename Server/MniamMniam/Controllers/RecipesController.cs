@@ -80,7 +80,11 @@ namespace MniamMniam.Controllers
         public IActionResult Create()
         {
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            return View(new CreateRecipeViewModel()
+            {
+                AllTags = _context.Tags.Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Name })
+            }
+            );
         }
 
         // POST: Recipes/Create
@@ -88,7 +92,7 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Text")] CreateRecipeViewModel recipeViewModel)
+        public async Task<IActionResult> Create(CreateRecipeViewModel recipeViewModel)
         {
             var recipe = new Recipe();
             if (ModelState.IsValid)
