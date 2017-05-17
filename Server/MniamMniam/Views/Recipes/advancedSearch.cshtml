@@ -12,12 +12,49 @@
     @using (Html.BeginForm("advancedSearch", "Recipes", FormMethod.Get))
     {
 
-        <p>Name @Html.TextBox("Name", "") </p>
+        <table>
+            <tr>
+                <td>
+                    name
+                </td>
+                <td>
+                    @Html.TextBox("Name", "")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    description
+                </td>
+                <td>
+                    @Html.TextBox("Text", "")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    author
+                </td>
+                <td>
+                    @Html.TextBox("UserName", "")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Tag
+                </td>
+                <td>
+                    @Html.TextBox("TagName", "")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Ingredient
+                </td>
+                <td>
+                    @Html.TextBox("IngredientName", "")
+                </td>
+            </tr>
 
-        <p>Description @Html.TextBox("Text", "")</p>
-
-        <p>Author @Html.TextBox("UserName", "") </p>
-
+        </table>
         <input type="submit" value="Search" />
 
     }
@@ -34,6 +71,9 @@
                     @Html.DisplayNameFor(model => model.Text)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Tags)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.ApplicationUser)
                 </th>
                 <th></th>
@@ -48,6 +88,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Text)
+                    </td>
+                    <td>
+                        @string.Join(" ", item.Tags.Select(tag => tag.Tag.Name))
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)

@@ -89,21 +89,31 @@ namespace MniamMniam.Controllers
 
         public async Task<IActionResult> advancedSearch()
         {
-            var applicationDbContext = _context.Recipes.Include(r => r.ApplicationUser);
+            var applicationDbContext = _context.Recipes
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
+                .Include(r => r.ApplicationUser);
             return View(await applicationDbContext.ToListAsync());
         }
 
         [HttpGet]
-        public async Task<IActionResult> advancedSearch(string Name, string Text, string UserName)
+        public async Task<IActionResult> advancedSearch(string Name, string Text, string UserName, string TagName, string IngredientName)
         {
-            if (Name == null && Text == null && UserName == null)
+            if (Name == null && Text == null && UserName == null && TagName == null && IngredientName == null)
             {
                 return await advancedSearch();
             }
             if (Name == null) Name = "";
             if (Text == null) Text = "";
             if (UserName == null) UserName = "";
-            var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(Name) && rec.Text.Contains(Text) && rec.ApplicationUser.UserName.Contains(UserName)).Include(r => r.ApplicationUser);
+            if (TagName == null) TagName = string.Empty;
+            if (IngredientName == null) IngredientName = string.Empty;
+            var applicationDbContext = _context.Recipes
+                .Where(rec => rec.Name.Contains(Name))
+                .Where(rec => rec.Text.Contains(Text))
+                .Where(rec => rec.ApplicationUser.UserName.Contains(UserName))
+                .Where(rec => rec.Tags.Any(tag => tag.Tag.Name.Contains(TagName)))
+                .Where(rec => rec.Ingredients.Any(ing => ing.Ingredient.Name.Contains(IngredientName)))
+                .Include(r => r.ApplicationUser);
             return View(await applicationDbContext.ToListAsync());
         }
 
