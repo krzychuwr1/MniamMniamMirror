@@ -82,6 +82,30 @@ namespace MniamMniam.Controllers
             return View(recipe);
         }
 
+
+        public async Task<IActionResult> advancedSearch()
+        {
+            var applicationDbContext = _context.Recipes.Include(r => r.ApplicationUser);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> advancedSearch(string Name, string Text, string UserName)
+        {
+            if (Name == null && Text == null && UserName == null)
+            {
+                return await advancedSearch();
+            }
+            if (Name == null) Name = "";
+            if (Text == null) Text = "";
+            if (UserName == null) UserName = "";
+            var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(Name) && rec.Text.Contains(Text) && rec.ApplicationUser.UserName.Contains(UserName)).Include(r => r.ApplicationUser);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+
+
+
         // GET: Recipes/Create
         public IActionResult Create()
         {
