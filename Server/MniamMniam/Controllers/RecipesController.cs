@@ -113,7 +113,8 @@ namespace MniamMniam.Controllers
                 .Where(rec => rec.ApplicationUser.UserName.Contains(UserName))
                 .Where(rec => rec.Tags.Any(tag => tag.Tag.Name.Contains(TagName)))
                 .Where(rec => rec.Ingredients.Any(ing => ing.Ingredient.Name.Contains(IngredientName)))
-                .Include(r => r.ApplicationUser);
+                .Include(r => r.ApplicationUser)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
             return View(await applicationDbContext.ToListAsync());
         }
 
