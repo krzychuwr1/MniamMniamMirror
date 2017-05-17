@@ -1,0 +1,106 @@
+@model IEnumerable<MniamMniam.Models.CookBookModels.Recipe>
+
+    @{
+        ViewData["Title"] = "advancedSearch";
+    }
+
+    <h2>advancedSearch</h2>
+
+
+
+
+    @using (Html.BeginForm("advancedSearch", "Recipes", FormMethod.Get))
+    {
+
+        <table>
+            <tr>
+                <td>
+                    name
+                </td>
+                <td>
+                    @Html.TextBox("Name", "")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    description
+                </td>
+                <td>
+                    @Html.TextBox("Text", "")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    author
+                </td>
+                <td>
+                    @Html.TextBox("UserName", "")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Tag
+                </td>
+                <td>
+                    @Html.TextBox("TagName", "")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Ingredient
+                </td>
+                <td>
+                    @Html.TextBox("IngredientName", "")
+                </td>
+            </tr>
+
+        </table>
+        <input type="submit" value="Search" />
+
+    }
+    <a asp-action="Index">back</a>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Text)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tags)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationUser)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Text)
+                    </td>
+                    <td>
+                        @string.Join(" ", item.Tags.Select(tag => tag.Tag.Name))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
