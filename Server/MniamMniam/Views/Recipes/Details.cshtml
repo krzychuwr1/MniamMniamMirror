@@ -23,6 +23,20 @@
             @Html.DisplayFor(model => model.Text)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.Ingredients)
+        </dt>
+        <dd>
+            @foreach (var ing in Model.Ingredients)
+            {
+                @Html.DisplayFor(model => ing.Ingredient.Name)
+                @Html.Raw(" ")
+                @Html.DisplayFor(model => ing.Amount)
+                @Html.DisplayFor(model => ing.Ingredient.Unit)
+                <br />
+            }
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.Tags)
         </dt>
         <dd>

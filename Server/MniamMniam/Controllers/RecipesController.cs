@@ -34,7 +34,8 @@ namespace MniamMniam.Controllers
         {
             var applicationDbContext = _context.Recipes
                 .Include(r => r.ApplicationUser)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
+                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -47,7 +48,8 @@ namespace MniamMniam.Controllers
             }
             var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(Name))
                 .Include(r => r.ApplicationUser)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
+                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -57,7 +59,8 @@ namespace MniamMniam.Controllers
             var recipes = _context.Recipes
                 .Where(rec => rec.ApplicationUserId == userId)
                 .Include(r => r.ApplicationUser)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
+                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient);
             return View(await recipes.ToListAsync());
         }
 
@@ -73,6 +76,7 @@ namespace MniamMniam.Controllers
                 .Include(r => r.ApplicationUser)
                 .Include(r => r.Reviews)
                 .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
+                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (recipe == null)
             {
@@ -112,7 +116,8 @@ namespace MniamMniam.Controllers
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View(new CreateRecipeViewModel()
             {
-                AllTags = _context.Tags.ToList().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() })
+                AllTags = _context.Tags.ToList().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() }),
+                AllIngredients = _context.Ingredients.ToList().Select(ing => new SelectListItem() { Text = $"{ing.Name} {ing.Unit}", Value = ing.Id.ToString() })
             }
             );
         }
@@ -125,8 +130,8 @@ namespace MniamMniam.Controllers
         public async Task<IActionResult> Create(CreateRecipeViewModel recipeViewModel)
         {
             var recipe = new Recipe();
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid) bring it back once we figure out why it says it is not valid when less than 3 ingredients chosen
+            //{
                 recipe.ApplicationUserId = _userManager.GetUserId(HttpContext.User);
                 var now = DateTime.Now;
                 recipe.CreatedAt = now;
@@ -137,10 +142,29 @@ namespace MniamMniam.Controllers
                 var tags = _context.Tags.Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
                 recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
 
+                var ingredient1 = _context.Ingredients.FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient1);
+                var ingredient2 = _context.Ingredients.FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient2);
+                var ingredient3 = _context.Ingredients.FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient3);
+
+                recipe.Ingredients = new List<RecipeIngredient>();
+
+                if(recipeViewModel.SelectedIngredientAmount1.HasValue && ingredient1 != null)
+                {
+                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount1.Value });
+                }
+                if (recipeViewModel.SelectedIngredientAmount2.HasValue && ingredient2 != null)
+                {
+                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount2.Value });
+                }
+                if (recipeViewModel.SelectedIngredientAmount3.HasValue && ingredient3 != null)
+                {
+                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount3.Value });
+                }
+
                 _context.Recipes.Add(recipe);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
-            }
+
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", recipe.ApplicationUserId);
             return View(recipe);
         }
