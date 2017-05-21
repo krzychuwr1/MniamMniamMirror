@@ -13,14 +13,14 @@
         <div class="form-group">    
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" maxlength="30"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Text" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <textarea asp-for="Text" class="form-control" cols="40" rows="10"></textarea>
+                <textarea asp-for="Text" class="form-control" cols="40" rows="10" maxlength="200"></textarea>
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>
         </div>
@@ -36,7 +36,7 @@
             <select asp-for="SelectedIngredient1" asp-items="@Model.AllIngredients">
                 <option>Please select one</option>
             </select>
-            <input asp-for="SelectedIngredientAmount1"/>
+            <input asp-for="SelectedIngredientAmount1"  min="1" step="1"/>
         </div>
 
         <div class="form-group">
@@ -44,7 +44,7 @@
             <select asp-for="SelectedIngredient2" asp-items="@Model.AllIngredients">
                 <option>Please select one</option>
             </select>
-            <input asp-for="SelectedIngredientAmount2"/>
+            <input asp-for="SelectedIngredientAmount2"  min="1" step="1"/>
         </div>
 
         <div class="form-group">
@@ -52,7 +52,7 @@
             <select asp-for="SelectedIngredient3" asp-items="@Model.AllIngredients">
                 <option>Please select one</option>
             </select>
-            <input asp-for="SelectedIngredientAmount3"/>
+            <input asp-for="SelectedIngredientAmount3"  min="1" step="1"/>
         </div>
 
             <div class="form-group">
