@@ -4,7 +4,7 @@
         ViewData["Title"] = "advancedSearch";
     }
 
-    <h2>advancedSearch</h2>
+    <h2>Advanced Search</h2>
 
 
 
@@ -15,47 +15,49 @@
         <table>
             <tr>
                 <td>
-                    name
+                    <label class="col-md-2 control-label">Name</label>
+
                 </td>
-                <td>
-                    @Html.TextBox("Name", "")
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    description
-                </td>
-                <td>
-                    @Html.TextBox("Text", "")
+                <td> 
+                    @Html.TextBox("Name", "", new { maxlength = 50, @class = "form-control" })
                 </td>
             </tr>
             <tr>
                 <td>
-                    author
+                    <label class="col-md-2 control-label">Description</label>
+
                 </td>
                 <td>
-                    @Html.TextBox("UserName", "")
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Tag
-                </td>
-                <td>
-                    @Html.TextBox("TagName", "")
+                    @Html.TextBox("Text", "", new { maxlength = 50, @class = "form-control" })
                 </td>
             </tr>
             <tr>
                 <td>
-                    Ingredient
+                    <label class="col-md-2 control-label">Author</label>
                 </td>
                 <td>
-                    @Html.TextBox("IngredientName", "")
+                    @Html.TextBox("UserName", "", new { maxlength = 50, @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="col-md-2 control-label">Tag</label>
+                </td>
+                <td>
+                    @Html.TextBox("TagName", "", new { maxlength = 50, @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="col-md-2 control-label">Ingredient</label>
+                </td>
+                <td>
+                    @Html.TextBox("IngredientName", "", new { maxlength = 50, @class = "form-control" })
                 </td>
             </tr>
 
         </table>
-        <input type="submit" value="Search" />
+        <input type="submit" value="Search" class="btn btn-default"/>
 
     }
     <a asp-action="Index">back</a>
