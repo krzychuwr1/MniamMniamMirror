@@ -64,6 +64,17 @@ namespace MniamMniam.Controllers
             return View(await recipes.ToListAsync());
         }
 
+        public async Task<IActionResult> FavouriteRecipes()
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var recipes = _context.Recipes
+                .Where(rec => rec.Favourites.Any(fav => fav.ApplicationUserId == userId))
+                .Include(r => r.ApplicationUser)
+                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
+                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient);
+            return View(await recipes.ToListAsync());
+        }
+
         // GET: Recipes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -265,6 +276,39 @@ namespace MniamMniam.Controllers
             _context.Recipes.Remove(recipe);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> AddFavourite(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var recipe = await _context.Recipes.SingleOrDefaultAsync(m => m.Id == id);
+            if (recipe == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(HttpContext.User);
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", recipe.ApplicationUserId);
+
+            if (!_context.FavouriteRecipes.Any(fav => fav.RecipeId == id && fav.ApplicationUserId == userId))
+            {
+                var favouriteRecipe = new FavouriteRecipe()
+                {
+                    ApplicationUser = _context.Users.First(u => u.Id == userId),
+                    Recipe = recipe
+                };
+
+                _context.FavouriteRecipes.Add(favouriteRecipe);
+
+                await _context.SaveChangesAsync();
+            }
+
+
+            return RedirectToAction(nameof(FavouriteRecipes));
         }
 
         private bool RecipeExists(int id)
