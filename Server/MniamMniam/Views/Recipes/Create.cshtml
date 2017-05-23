@@ -27,40 +27,54 @@
 
         <div class="form-group">
             <label class="col-md-2 control-label">Tags</label>
-            <select asp-for="SelectedTags" multiple="multiple" asp-items="@Model.AllTags">
-                <option>Please select tags</option>
-            </select>
-        </div>
+            <div class="col-md-10">
+                <select asp-for="SelectedTags" class="form-control" multiple="multiple" asp-items="@Model.AllTags">
+                    <option>Please select tags</option>
+                </select>
+                </div>
+            </div>
         <div class="form-group">
             <label class="col-md-2 control-label">Ingredient</label>
-            <select asp-for="SelectedIngredient1" asp-items="@Model.AllIngredients">
-                <option>Please select one</option>
-            </select>
-            <input asp-for="SelectedIngredientAmount1"  min="1" step="1"/>
+            <div class="form-inline">
+                <div class="col-md-10">
+                    <select asp-for="SelectedIngredient1" class="form-control" asp-items="@Model.AllIngredients">
+                        <option>Please select one</option>
+                    </select>
+                    <input asp-for="SelectedIngredientAmount1" class="form-control" min="1" step="1" />
+                    </div>
+                </div>
         </div>
+            <div class="form-group">
+                    <label class="col-md-2 control-label">Ingredient</label>
+                <div class="form-inline">
+                    <div class="col-md-10">
+                        <select asp-for="SelectedIngredient2" class="form-control" asp-items="@Model.AllIngredients">
+                            <option>Please select one</option>
+                        </select>
+                        <input asp-for="SelectedIngredientAmount2" class="form-control" min="1" step="1" />
+                        </div>
+                    </div>
+                </div>
 
-        <div class="form-group">
-            <label class="col-md-2 control-label">Ingredient</label>
-            <select asp-for="SelectedIngredient2" asp-items="@Model.AllIngredients">
-                <option>Please select one</option>
-            </select>
-            <input asp-for="SelectedIngredientAmount2"  min="1" step="1"/>
-        </div>
 
-        <div class="form-group">
-            <label class="col-md-2 control-label">Ingredient</label>
-            <select asp-for="SelectedIngredient3" asp-items="@Model.AllIngredients">
-                <option>Please select one</option>
-            </select>
-            <input asp-for="SelectedIngredientAmount3"  min="1" step="1"/>
-        </div>
+            <div class="form-group">
+                    <label class="col-md-2 control-label">Ingredient</label>
+                <div class="form-inline">
+                    <div class="col-md-10">
+                        <select asp-for="SelectedIngredient3" class="form-control" asp-items="@Model.AllIngredients" float="left" display="inline">
+                            <option>Please select one</option>
+                        </select>
+                        <input asp-for="SelectedIngredientAmount3" class="form-control" min="1" step="1" float="left" display="inline" />
+                    </div>
+                    </div>
+            </div>
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Create" class="btn btn-default" />
                 </div>
             </div>
-        </div>
+</div>
 </form>
 
 <div>
