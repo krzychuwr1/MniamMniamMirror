@@ -165,11 +165,11 @@ namespace MniamMniam.Controllers
                 }
                 if (recipeViewModel.SelectedIngredientAmount2.HasValue && ingredient2 != null)
                 {
-                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount2.Value });
+                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient2, Amount = recipeViewModel.SelectedIngredientAmount2.Value });
                 }
                 if (recipeViewModel.SelectedIngredientAmount3.HasValue && ingredient3 != null)
                 {
-                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount3.Value });
+                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient3, Amount = recipeViewModel.SelectedIngredientAmount3.Value });
                 }
 
                 _context.Recipes.Add(recipe);
