@@ -12,49 +12,52 @@
 
 @using (Html.BeginForm("Index", "Recipes", FormMethod.Get))
 {
-    @Html.TextBox("Name")
-    <input type="submit" value="Search" />
+    <div class="form-inline">
+        @Html.TextBox("Name", "", new { maxlength = 20, @class = "form-control", display = "inline" })
+        <input type="submit" value="Search" class="btn btn-default" />
+    </div>
 }
-<a asp-action="advancedSearch">advanced</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Text)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tags)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationUser)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Text)
-            </td>
-            <td>
-                @string.Join(" ", item.Tags.Select(tag => tag.Tag.Name))
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <a asp-action="advancedSearch">Advanced</a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Text)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tags)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ApplicationUser)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Text)
+                        </td>
+                        <td>
+                            @string.Join(" ", item.Tags.Select(tag => tag.Tag.Name))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
