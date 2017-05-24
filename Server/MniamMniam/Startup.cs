@@ -15,6 +15,7 @@ using MniamMniam.Services;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using MniamMniam.Models.CookBookModels;
+using MniamMniam.Repositories;
 
 namespace MniamMniam
 {
@@ -80,6 +81,7 @@ namespace MniamMniam
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IRecipesRepository, RecipesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

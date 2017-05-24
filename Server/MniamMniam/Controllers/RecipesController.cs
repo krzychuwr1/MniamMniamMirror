@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using MniamMniam.Models;
 using AutoMapper;
 using MniamMniam.ViewModels;
+using MniamMniam.Repositories;
 
 namespace MniamMniam.Controllers
 {
@@ -22,57 +23,35 @@ namespace MniamMniam.Controllers
 
         private readonly IMapper _mapper;
 
-        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IMapper mapper)
+        private readonly IRecipesRepository recipesRepository;
+
+        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IMapper mapper, IRecipesRepository recipesRepository)
         {
             _context = context;
             _userManager = userManager;
             _mapper = mapper;
+            this.recipesRepository = recipesRepository;
+
         }
 
         // GET: Recipes
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Recipes
-                .Include(r => r.ApplicationUser)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
-                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient);
-            return View(await applicationDbContext.ToListAsync());
-        }
+        public IActionResult Index() => View(recipesRepository.GetAllRecipes());
 
         [HttpGet]
-        public async Task<IActionResult> Index(string Name)
-        {
-            if(Name == null)
-            {
-                return await Index();
-            }
-            var applicationDbContext = _context.Recipes.Where(rec => rec.Name.Contains(Name))
-                .Include(r => r.ApplicationUser)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
-                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient);
-            return View(await applicationDbContext.ToListAsync());
-        }
+        public IActionResult Index(string Name) => Name == null ? Index() : View(recipesRepository.GetFilteredRecipes(name: Name));
 
-        public async Task<IActionResult> MyRecipes()
+        public IActionResult MyRecipes()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var recipes = _context.Recipes
-                .Where(rec => rec.ApplicationUserId == userId)
-                .Include(r => r.ApplicationUser)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
-                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient);
-            return View(await recipes.ToListAsync());
+            var recipes = recipesRepository.GetFilteredRecipes(userId: userId);
+            return View(recipes);
         }
 
-        public async Task<IActionResult> FavouriteRecipes()
+        public IActionResult FavouriteRecipes()
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var recipes = _context.Recipes
-                .Where(rec => rec.Favourites.Any(fav => fav.ApplicationUserId == userId))
-                .Include(r => r.ApplicationUser)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
-                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient);
-            return View(await recipes.ToListAsync());
+            var recipes = recipesRepository.GetFilteredRecipes(favouritesUserId: userId);
+            return View(recipes);
         }
 
         // GET: Recipes/Details/5
@@ -83,12 +62,8 @@ namespace MniamMniam.Controllers
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes
-                .Include(r => r.ApplicationUser)
-                .Include(r => r.Reviews)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
-                .Include(r => r.Ingredients).ThenInclude(ing => ing.Ingredient)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var recipe = recipesRepository.GetRecipeWithReviews(id.Value);
+
             if (recipe == null)
             {
                 return NotFound();
@@ -98,40 +73,26 @@ namespace MniamMniam.Controllers
         }
 
 
-        public async Task<IActionResult> advancedSearch()
-        {
-            var applicationDbContext = _context.Recipes
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag)
-                .Include(r => r.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
-        }
+        public IActionResult advancedSearch() => View(recipesRepository.GetAllRecipes());
 
         [HttpGet]
         public async Task<IActionResult> advancedSearch(string Name, string Text, string UserName, string TagName, string IngredientName)
         {
             if (Name == null && Text == null && UserName == null && TagName == null && IngredientName == null)
             {
-                return await advancedSearch();
+                return advancedSearch();
             }
             if (Name == null) Name = "";
             if (Text == null) Text = "";
             if (UserName == null) UserName = "";
             if (TagName == null) TagName = string.Empty;
             if (IngredientName == null) IngredientName = string.Empty;
-            var applicationDbContext = _context.Recipes
-                .Where(rec => rec.Name.Contains(Name))
-                .Where(rec => rec.Text.Contains(Text))
-                .Where(rec => rec.ApplicationUser.UserName.Contains(UserName))
-                .Where(rec => rec.Tags.Any(tag => tag.Tag.Name.Contains(TagName)))
-                .Where(rec => rec.Ingredients.Any(ing => ing.Ingredient.Name.Contains(IngredientName)))
-                .Include(r => r.ApplicationUser)
-                .Include(r => r.Tags).ThenInclude(tag => tag.Tag);
-            return View(await applicationDbContext.ToListAsync());
+
+            var recipes = recipesRepository.GetFilteredRecipes(Name, Text, UserName, TagName, IngredientName);
+
+            return View(recipes);
         }
-
-
-
-
+        
         // GET: Recipes/Create
         public IActionResult Create()
         {
@@ -183,8 +144,8 @@ namespace MniamMniam.Controllers
                     recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient3, Amount = recipeViewModel.SelectedIngredientAmount3.Value });
                 }
 
-                _context.Recipes.Add(recipe);
-                await _context.SaveChangesAsync();
+                await recipesRepository.Add(recipe);
+            
                 return RedirectToAction("Index");
 
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", recipe.ApplicationUserId);
@@ -199,7 +160,7 @@ namespace MniamMniam.Controllers
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes.SingleOrDefaultAsync(m => m.Id == id);
+            var recipe = recipesRepository.GetRecipe(id.Value);
             if (recipe == null)
             {
                 return NotFound();
@@ -220,7 +181,7 @@ namespace MniamMniam.Controllers
                 return NotFound();
             }
 
-            var oldRecipe = _context.Recipes.Find(id);
+            var oldRecipe = recipesRepository.GetRecipe(id);
 
             recipe = _mapper.Map(recipe, oldRecipe);
 
@@ -228,8 +189,7 @@ namespace MniamMniam.Controllers
             {
                 try
                 {
-                    _context.Update(recipe);
-                    await _context.SaveChangesAsync();
+                    await recipesRepository.Update(recipe);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -256,9 +216,8 @@ namespace MniamMniam.Controllers
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes
-                .Include(r => r.ApplicationUser)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var recipe = recipesRepository.GetRecipe(id.Value);
+
             if (recipe == null)
             {
                 return NotFound();
@@ -272,20 +231,18 @@ namespace MniamMniam.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var recipe = await _context.Recipes.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Recipes.Remove(recipe);
-            await _context.SaveChangesAsync();
+            await recipesRepository.Remove(id);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> AddFavourite(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes.SingleOrDefaultAsync(m => m.Id == id);
+            var recipe = recipesRepository.GetRecipe(id.Value);
             if (recipe == null)
             {
                 return NotFound();
@@ -311,9 +268,6 @@ namespace MniamMniam.Controllers
             return RedirectToAction(nameof(FavouriteRecipes));
         }
 
-        private bool RecipeExists(int id)
-        {
-            return _context.Recipes.Any(e => e.Id == id);
-        }
+        private bool RecipeExists(int id) => recipesRepository.GetRecipe(id) != null;
     }
 }
