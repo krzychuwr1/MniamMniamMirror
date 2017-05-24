@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26430.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MniamMniam", "MniamMniam\MniamMniam.csproj", "{C2F25AD1-4A07-4F15-8A1D-EAEA4329FC69}"
 EndProject
 Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "MniamMniamCordova", "MniamMniamCordova\MniamMniamCordova.jsproj", "{C86EE4A0-5028-4820-B322-0446EAAF0AFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MniamMniamTests", "MniamMniamTests\MniamMniamTests.csproj", "{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,30 @@ Global
 		{C86EE4A0-5028-4820-B322-0446EAAF0AFC}.Release|Windows-x86.ActiveCfg = Release|Windows-x86
 		{C86EE4A0-5028-4820-B322-0446EAAF0AFC}.Release|Windows-x86.Build.0 = Release|Windows-x86
 		{C86EE4A0-5028-4820-B322-0446EAAF0AFC}.Release|Windows-x86.Deploy.0 = Release|Windows-x86
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Android.ActiveCfg = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Android.Build.0 = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|iOS.ActiveCfg = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|iOS.Build.0 = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Windows-ARM.ActiveCfg = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Windows-ARM.Build.0 = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Windows-x64.ActiveCfg = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Windows-x64.Build.0 = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Windows-x86.ActiveCfg = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Debug|Windows-x86.Build.0 = Debug|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Android.ActiveCfg = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Android.Build.0 = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|iOS.ActiveCfg = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|iOS.Build.0 = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Windows-ARM.ActiveCfg = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Windows-ARM.Build.0 = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Windows-x64.ActiveCfg = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Windows-x64.Build.0 = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Windows-x86.ActiveCfg = Release|Any CPU
+		{CFA3AE45-70E5-4B90-851E-FAFC7E8CABF2}.Release|Windows-x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
