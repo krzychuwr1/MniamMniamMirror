@@ -82,6 +82,10 @@ namespace MniamMniam
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<IRecipesRepository, RecipesRepository>();
+            services.AddTransient<IFavouriteRecipesRepository, FavouriteRecipesRepository>();
+            services.AddTransient<IUsersRepository, UsersRepository>();
+            services.AddTransient<ITagsRepository, TagsRepository>();
+            services.AddTransient<IIngredientsRepository, IngredientsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

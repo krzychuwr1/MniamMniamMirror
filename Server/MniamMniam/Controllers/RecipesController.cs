@@ -17,20 +17,36 @@ namespace MniamMniam.Controllers
 {
     public class RecipesController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
         private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly IMapper _mapper;
 
         private readonly IRecipesRepository recipesRepository;
 
-        public RecipesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IMapper mapper, IRecipesRepository recipesRepository)
+        private readonly IUsersRepository usersRepository;
+
+        private readonly ITagsRepository tagsRepository;
+
+        private readonly IIngredientsRepository ingredientsRepository;
+
+        private readonly IFavouriteRecipesRepository favouriteRecipesRepository;
+
+        public RecipesController(
+            UserManager<ApplicationUser> userManager, 
+            IMapper mapper, 
+            IRecipesRepository recipesRepository,
+            IUsersRepository usersRepository,
+            ITagsRepository tagsRepository,
+            IIngredientsRepository ingredientsRepository,
+            IFavouriteRecipesRepository favouriteRecipesRepository)
         {
-            _context = context;
             _userManager = userManager;
             _mapper = mapper;
             this.recipesRepository = recipesRepository;
+            this.usersRepository = usersRepository;
+            this.tagsRepository = tagsRepository;
+            this.ingredientsRepository = ingredientsRepository;
+            this.favouriteRecipesRepository = favouriteRecipesRepository;
 
         }
 
@@ -96,11 +112,11 @@ namespace MniamMniam.Controllers
         // GET: Recipes/Create
         public IActionResult Create()
         {
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id");
             return View(new CreateRecipeViewModel()
             {
-                AllTags = _context.Tags.ToList().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() }),
-                AllIngredients = _context.Ingredients.ToList().Select(ing => new SelectListItem() { Text = $"{ing.Name} {ing.Unit}", Value = ing.Id.ToString() })
+                AllTags = tagsRepository.GetAllTags().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() }),
+                AllIngredients = ingredientsRepository.GetAllIngredients().Select(ing => new SelectListItem() { Text = $"{ing.Name} {ing.Unit}", Value = ing.Id.ToString() })
             }
             );
         }
@@ -122,12 +138,12 @@ namespace MniamMniam.Controllers
                 recipe.Name = recipeViewModel.Name;
                 recipe.Text = recipeViewModel.Text;
 
-                var tags = _context.Tags.Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
+                var tags = tagsRepository.GetAllTags().Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
                 recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
 
-                var ingredient1 = _context.Ingredients.FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient1);
-                var ingredient2 = _context.Ingredients.FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient2);
-                var ingredient3 = _context.Ingredients.FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient3);
+                var ingredient1 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient1);
+                var ingredient2 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient2);
+                var ingredient3 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient3);
 
                 recipe.Ingredients = new List<RecipeIngredient>();
 
@@ -148,7 +164,7 @@ namespace MniamMniam.Controllers
             
                 return RedirectToAction("Index");
 
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", recipe.ApplicationUserId);
+            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
             return View(recipe);
         }
 
@@ -165,7 +181,7 @@ namespace MniamMniam.Controllers
             {
                 return NotFound();
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", recipe.ApplicationUserId);
+            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
             return View(recipe);
         }
 
@@ -204,7 +220,7 @@ namespace MniamMniam.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", recipe.ApplicationUserId);
+            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
             return View(recipe);
         }
 
@@ -249,19 +265,18 @@ namespace MniamMniam.Controllers
             }
 
             var userId = _userManager.GetUserId(HttpContext.User);
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "Id", recipe.ApplicationUserId);
+            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
 
-            if (!_context.FavouriteRecipes.Any(fav => fav.RecipeId == id && fav.ApplicationUserId == userId))
+            if (!favouriteRecipesRepository.GetAllFavouriteRecipes().Any(fav => fav.RecipeId == id && fav.ApplicationUserId == userId))
             {
                 var favouriteRecipe = new FavouriteRecipe()
                 {
-                    ApplicationUser = _context.Users.First(u => u.Id == userId),
+                    ApplicationUser = usersRepository.GetAllUsers().First(u => u.Id == userId),
                     Recipe = recipe
                 };
 
-                _context.FavouriteRecipes.Add(favouriteRecipe);
+                await favouriteRecipesRepository.Add(favouriteRecipe);
 
-                await _context.SaveChangesAsync();
             }
 
 
