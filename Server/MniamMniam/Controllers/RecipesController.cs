@@ -12,9 +12,11 @@ using MniamMniam.Models;
 using AutoMapper;
 using MniamMniam.ViewModels;
 using MniamMniam.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MniamMniam.Controllers
 {
+    [Authorize]
     public class RecipesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
