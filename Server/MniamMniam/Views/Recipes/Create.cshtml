@@ -2,10 +2,10 @@
 @{
     ViewData["Title"] = "Create";
 }
-
+ 
 <h2>Create</h2>
 
-<form asp-action="Create">
+<form asp-action="Create" enctype="multipart/form-data">
     <div class="form-horizontal">
         <h4>Recipe</h4>
         <hr />
@@ -43,7 +43,9 @@
                     <input asp-for="SelectedIngredientAmount1" class="form-control" min="1" step="1" />
                     </div>
                 </div>
+            
         </div>
+        
             <div class="form-group">
                     <label class="col-md-2 control-label">Ingredient</label>
                 <div class="form-inline">
@@ -69,12 +71,24 @@
                     </div>
             </div>
 
+        <div class="form-group">
+            <div class="col-md-10">
+                <p>Add image</p>
+                <input type="file" name="files" multiple />
+            </div>
+        </div>
+       
+
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Create" class="btn btn-default" />
                 </div>
             </div>
 </div>
+
+
+
+
 </form>
 
 <div>

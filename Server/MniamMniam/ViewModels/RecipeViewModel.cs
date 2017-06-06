@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MniamMniam.Models.CookBookModels;
 using System;
 using System.Collections.Generic;
@@ -27,8 +28,14 @@ namespace MniamMniam.ViewModels
 
         public int? SelectedIngredientAmount3 { get; set; }
 
+        //public int[] SelectedIngredient { get; set; }
+        public IFormFile file { get; set; }
+
+        public List<IFormFile> files { get; set; }
+
         public IEnumerable<SelectListItem> AllTags { get; set; }
 
         public IEnumerable<SelectListItem> AllIngredients { get; set; }
+        
     }
 }
