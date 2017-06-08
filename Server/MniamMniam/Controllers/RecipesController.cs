@@ -14,9 +14,11 @@ using MniamMniam.ViewModels;
 using MniamMniam.Repositories;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MniamMniam.Controllers
 {
+    [Authorize]
     public class RecipesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

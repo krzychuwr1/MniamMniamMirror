@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MniamMniam.Data;
 using MniamMniam.Models.CookBookModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MniamMniam.Controllers
 {
+    [Authorize]
     public class IngredientsController : Controller
     {
         private readonly ApplicationDbContext _context;
