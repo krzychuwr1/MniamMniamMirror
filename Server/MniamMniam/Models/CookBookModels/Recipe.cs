@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
@@ -38,5 +39,8 @@ namespace MniamMniam.Models.CookBookModels
         public List<RecipeIngredient> Ingredients { get; set; }
 
         public List<RecipeTag> Tags { get; set; }
+
+       
+        public String Image { get; set; }
     }
 }

@@ -12,6 +12,8 @@ using MniamMniam.Models;
 using AutoMapper;
 using MniamMniam.ViewModels;
 using MniamMniam.Repositories;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MniamMniam.Controllers
@@ -128,7 +130,7 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateRecipeViewModel recipeViewModel)
+        public async Task<IActionResult> Create(CreateRecipeViewModel recipeViewModel, List<IFormFile> files)
         {
             var recipe = new Recipe();
             //if (ModelState.IsValid) bring it back once we figure out why it says it is not valid when less than 3 ingredients chosen
@@ -139,16 +141,56 @@ namespace MniamMniam.Controllers
                 recipe.UpdatedAt = now;
                 recipe.Name = recipeViewModel.Name;
                 recipe.Text = recipeViewModel.Text;
+              
 
                 var tags = tagsRepository.GetAllTags().Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
                 recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
+            recipe.Ingredients = new List<RecipeIngredient>();
 
-                var ingredient1 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient1);
-                var ingredient2 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient2);
-                var ingredient3 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient3);
+          
 
-                recipe.Ingredients = new List<RecipeIngredient>();
+            
 
+           // var filePath = "C:\\Users\\Piotr\\Desktop\\tmp\\image.jpg";
+
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    using (var fileStream = formFile.OpenReadStream())
+                    using (var ms = new MemoryStream())
+                    {
+                        fileStream.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        string Image = Convert.ToBase64String(fileBytes);
+                        recipe.Image = Image;
+                        // act on the Base64 data
+                    }
+                    /* SAVE IMAGE
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                    */
+                }
+            }
+      
+
+            /*
+            foreach (var ingredient in recipeViewModel.SelectedIngredient)
+                 {
+                var ingredient1 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == ingredient);
+                if (recipeViewModel.SelectedIngredientAmount1.HasValue && ingredient1 != null)
+                {
+                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount1.Value });
+                }
+            }*/
+            var ingredient1 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient1);
+            var ingredient2 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient2);
+            var ingredient3 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient3);
+             
+            
+            
                 if(recipeViewModel.SelectedIngredientAmount1.HasValue && ingredient1 != null)
                 {
                     recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount1.Value });
@@ -161,7 +203,7 @@ namespace MniamMniam.Controllers
                 {
                     recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient3, Amount = recipeViewModel.SelectedIngredientAmount3.Value });
                 }
-
+                
                 await recipesRepository.Add(recipe);
             
                 return RedirectToAction("Index");
@@ -226,6 +268,11 @@ namespace MniamMniam.Controllers
             return View(recipe);
         }
 
+        private bool RecipeExists(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         // GET: Recipes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -285,6 +332,21 @@ namespace MniamMniam.Controllers
             return RedirectToAction(nameof(FavouriteRecipes));
         }
 
-        private bool RecipeExists(int id) => recipesRepository.GetRecipe(id) != null;
+        public async Task<IActionResult> RemoveFavourite()
+        {
+            //TOdo
+            return null;
+        }
+
+        private byte[] ConvertToBytes(IFormFile image)
+        {
+            byte[] CoverImageBytes = null;
+            BinaryReader reader = new BinaryReader(image.OpenReadStream());
+            CoverImageBytes = reader.ReadBytes((int)image.Length);
+            return CoverImageBytes;
+        }
+
+        
+
     }
 }
