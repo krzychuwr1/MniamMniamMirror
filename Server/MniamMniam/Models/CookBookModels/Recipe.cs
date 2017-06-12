@@ -18,6 +18,10 @@ namespace MniamMniam.Models.CookBookModels
 
         public string Text { get; set; }
 
+        public string DetailedText { get; set; }
+
+        public int TimeNeeded { get; set; }
+
         [ScaffoldColumn(false)]
         public DateTime CreatedAt { get; set; }
 
@@ -39,8 +43,7 @@ namespace MniamMniam.Models.CookBookModels
         public List<RecipeIngredient> Ingredients { get; set; }
 
         public List<RecipeTag> Tags { get; set; }
-
-       
-        public String Image { get; set; }
+        
+        public string Image { get; set; }
     }
 }

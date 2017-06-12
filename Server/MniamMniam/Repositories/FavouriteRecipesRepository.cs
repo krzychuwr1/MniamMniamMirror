@@ -11,6 +11,7 @@ namespace MniamMniam.Repositories
     {
         IEnumerable<FavouriteRecipe> GetAllFavouriteRecipes();
         Task Add(FavouriteRecipe favouriteRecipe);
+        Task Remove(int id);
     }
 
     public class FavouriteRecipesRepository : IFavouriteRecipesRepository
@@ -27,6 +28,13 @@ namespace MniamMniam.Repositories
         public async Task Add(FavouriteRecipe favourite)
         {
             db.FavouriteRecipes.Add(favourite);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task Remove(int id)
+        {
+            var favouriteRecipe = db.FavouriteRecipes.FirstOrDefault(rec => rec.Id == id);
+            db.FavouriteRecipes.Remove(favouriteRecipe);
             await db.SaveChangesAsync();
         }
     }

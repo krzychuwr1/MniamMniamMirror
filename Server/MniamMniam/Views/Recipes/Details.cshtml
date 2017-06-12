@@ -9,8 +9,10 @@
 <div>
     <h4>Recipe</h4>
     <hr />
-
-    <img src="data:image/png;base64, @Model.Image" alt="Image" />
+    @if(@Model.Image != null)
+    {
+        <img src="data:image/png;base64, @Model.Image" alt="Image" />
+    }
 
     <dl class="dl-horizontal">
         <dt>
@@ -60,8 +62,11 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="AddFavourite" asp-route-id="@Model.Id">Add to favourites</a> |
+    @if (ViewBag.IsMyRecipe)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
+    }
+    <a asp-action="AddFavourite" asp-route-id="@Model.Id">Add to favourites</a>
     <a asp-action="Index">Back to List</a>
 </div>
 
@@ -106,9 +111,15 @@
                     @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
                 </td>
                 <td>
-                    <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-controller="Reviews" asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-controller="Reviews" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (ViewBag.userId == item.ApplicationUserId)
+                    { 
+                        <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    }
+                    <a asp-controller="Reviews" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    @if (ViewBag.userId == item.ApplicationUserId)
+                    {
+                        <a asp-controller="Reviews" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
                 </td>
             </tr>
         }
