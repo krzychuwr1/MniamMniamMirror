@@ -19,9 +19,9 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <p>Add image</p>
-                <input type="file" name="files" multiple />
+            <label class="col-md-2 control-label">Image</label>
+            <div class="col-md-10">
+                <input type="file" name="files" style="margin-top: 6px;" multiple />
             </div>
         </div>
 
@@ -36,7 +36,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Tags</label>
             <div class="col-md-10">
-                <select asp-for="SelectedTags" class="form-control" multiple="multiple" asp-items="@Model.AllTags">
+                <select asp-for="SelectedTags" class="form-control" asp-items="@Model.AllTags">
                     <option>Please select tags</option>
                 </select>
                 </div>
