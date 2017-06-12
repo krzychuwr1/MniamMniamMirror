@@ -17,6 +17,14 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <p>Add image</p>
+                <input type="file" name="files" multiple />
+            </div>
+        </div>
+
         <div class="form-group">
             <label asp-for="Text" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -33,57 +41,32 @@
                 </select>
                 </div>
             </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">Ingredient</label>
-            <div class="form-inline">
-                <div class="col-md-10">
-                    <select asp-for="SelectedIngredient" class="form-control" asp-items="@Model.AllIngredients">
-                        <option>Please select one</option>
-                    </select>
-                    <input asp-for="SelectedIngredientAmount" class="form-control" min="1" step="1" />
-                    </div>
-                </div>
-            
-        </div>
-        
-            <div class="form-group">
-                    <label class="col-md-2 control-label">Ingredient</label>
+
+        <div id="ingredientsList">
+            <div class="form-group" id="firstIngredient">
+                <label class="col-md-2 control-label">Ingredient</label>
                 <div class="form-inline">
                     <div class="col-md-10">
-                        <select asp-for="SelectedIngredient" class="form-control" asp-items="@Model.AllIngredients">
+                        <select asp-for="SelectedIngredient" class="form-control" asp-items="@Model.AllIngredients" id="testoweId">
                             <option>Please select one</option>
                         </select>
                         <input asp-for="SelectedIngredientAmount" class="form-control" min="1" step="1" />
-                        </div>
                     </div>
                 </div>
-
-
-            <div class="form-group">
-                    <label class="col-md-2 control-label">Ingredient</label>
-                <div class="form-inline">
-                    <div class="col-md-10">
-                        <select asp-for="SelectedIngredient" class="form-control" asp-items="@Model.AllIngredients" float="left" display="inline">
-                            <option>Please select one</option>
-                        </select>
-                        <input asp-for="SelectedIngredientAmount" class="form-control" min="1" step="1" float="left" display="inline" />
-                    </div>
-                    </div>
-            </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                <p>Add image</p>
-                <input type="file" name="files" multiple />
             </div>
         </div>
-       
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" id="anotherIngredient" value="Add another ingredient" class="btn btn-default" />
             </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
 </div>
 
 
