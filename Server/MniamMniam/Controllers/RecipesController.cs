@@ -89,6 +89,11 @@ namespace MniamMniam.Controllers
                 return NotFound();
             }
 
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            ViewBag.IsMyRecipe = recipe.ApplicationUserId == userId;
+            ViewBag.UserId = userId;
+
             return View(recipe);
         }
 
@@ -309,10 +314,10 @@ namespace MniamMniam.Controllers
             return RedirectToAction(nameof(FavouriteRecipes));
         }
 
-        public async Task<IActionResult> RemoveFavourite()
+        public async Task<IActionResult> RemoveFavourite(int? id)
         {
-            //TOdo
-            return null;
+            await favouriteRecipesRepository.Remove(id.Value);
+            return RedirectToAction(nameof(FavouriteRecipes));
         }
 
         private byte[] ConvertToBytes(IFormFile image)
