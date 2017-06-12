@@ -133,8 +133,8 @@ namespace MniamMniam.Controllers
         public async Task<IActionResult> Create(CreateRecipeViewModel recipeViewModel, List<IFormFile> files)
         {
             var recipe = new Recipe();
-            //if (ModelState.IsValid) bring it back once we figure out why it says it is not valid when less than 3 ingredients chosen
-            //{
+            if (ModelState.IsValid)
+            {
                 recipe.ApplicationUserId = _userManager.GetUserId(HttpContext.User);
                 var now = DateTime.Now;
                 recipe.CreatedAt = now;
@@ -145,71 +145,48 @@ namespace MniamMniam.Controllers
 
                 var tags = tagsRepository.GetAllTags().Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
                 recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
-            recipe.Ingredients = new List<RecipeIngredient>();
-
-          
-
+                recipe.Ingredients = new List<RecipeIngredient>();
             
+                // var filePath = "C:\\Users\\Piotr\\Desktop\\tmp\\image.jpg";
 
-           // var filePath = "C:\\Users\\Piotr\\Desktop\\tmp\\image.jpg";
-
-            foreach (var formFile in files)
-            {
-                if (formFile.Length > 0)
+                foreach (var formFile in files)
                 {
-                    using (var fileStream = formFile.OpenReadStream())
-                    using (var ms = new MemoryStream())
+                    if (formFile.Length > 0)
                     {
-                        fileStream.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        string Image = Convert.ToBase64String(fileBytes);
-                        recipe.Image = Image;
-                        // act on the Base64 data
+                        using (var fileStream = formFile.OpenReadStream())
+                        using (var ms = new MemoryStream())
+                        {
+                            fileStream.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            string Image = Convert.ToBase64String(fileBytes);
+                            recipe.Image = Image;
+                            // act on the Base64 data
+                        }
+                        /* SAVE IMAGE
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
+                        */
                     }
-                    /* SAVE IMAGE
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                }
+            
+                foreach (var pair in recipeViewModel.SelectedIngredient.Zip(recipeViewModel.SelectedIngredientAmount, (ingredient, amount) => new { ingredient, amount }))
+                {
+                    var ingredient1 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == pair.ingredient);
+                    if (ingredient1 != null)
                     {
-                        await formFile.CopyToAsync(stream);
+                        recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = pair.amount });
                     }
-                    */
-                }
-            }
-      
-
-            /*
-            foreach (var ingredient in recipeViewModel.SelectedIngredient)
-                 {
-                var ingredient1 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == ingredient);
-                if (recipeViewModel.SelectedIngredientAmount1.HasValue && ingredient1 != null)
-                {
-                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount1.Value });
-                }
-            }*/
-            var ingredient1 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient1);
-            var ingredient2 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient2);
-            var ingredient3 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == recipeViewModel.SelectedIngredient3);
-             
-            
-            
-                if(recipeViewModel.SelectedIngredientAmount1.HasValue && ingredient1 != null)
-                {
-                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = recipeViewModel.SelectedIngredientAmount1.Value });
-                }
-                if (recipeViewModel.SelectedIngredientAmount2.HasValue && ingredient2 != null)
-                {
-                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient2, Amount = recipeViewModel.SelectedIngredientAmount2.Value });
-                }
-                if (recipeViewModel.SelectedIngredientAmount3.HasValue && ingredient3 != null)
-                {
-                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient3, Amount = recipeViewModel.SelectedIngredientAmount3.Value });
                 }
                 
                 await recipesRepository.Add(recipe);
             
                 return RedirectToAction("Index");
+            }
 
             ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
-            return View(recipe);
+            return View(recipeViewModel);
         }
 
         // GET: Recipes/Edit/5

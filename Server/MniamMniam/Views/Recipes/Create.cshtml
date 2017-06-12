@@ -37,10 +37,10 @@
             <label class="col-md-2 control-label">Ingredient</label>
             <div class="form-inline">
                 <div class="col-md-10">
-                    <select asp-for="SelectedIngredient1" class="form-control" asp-items="@Model.AllIngredients">
+                    <select asp-for="SelectedIngredient" class="form-control" asp-items="@Model.AllIngredients">
                         <option>Please select one</option>
                     </select>
-                    <input asp-for="SelectedIngredientAmount1" class="form-control" min="1" step="1" />
+                    <input asp-for="SelectedIngredientAmount" class="form-control" min="1" step="1" />
                     </div>
                 </div>
             
@@ -50,10 +50,10 @@
                     <label class="col-md-2 control-label">Ingredient</label>
                 <div class="form-inline">
                     <div class="col-md-10">
-                        <select asp-for="SelectedIngredient2" class="form-control" asp-items="@Model.AllIngredients">
+                        <select asp-for="SelectedIngredient" class="form-control" asp-items="@Model.AllIngredients">
                             <option>Please select one</option>
                         </select>
-                        <input asp-for="SelectedIngredientAmount2" class="form-control" min="1" step="1" />
+                        <input asp-for="SelectedIngredientAmount" class="form-control" min="1" step="1" />
                         </div>
                     </div>
                 </div>
@@ -63,10 +63,10 @@
                     <label class="col-md-2 control-label">Ingredient</label>
                 <div class="form-inline">
                     <div class="col-md-10">
-                        <select asp-for="SelectedIngredient3" class="form-control" asp-items="@Model.AllIngredients" float="left" display="inline">
+                        <select asp-for="SelectedIngredient" class="form-control" asp-items="@Model.AllIngredients" float="left" display="inline">
                             <option>Please select one</option>
                         </select>
-                        <input asp-for="SelectedIngredientAmount3" class="form-control" min="1" step="1" float="left" display="inline" />
+                        <input asp-for="SelectedIngredientAmount" class="form-control" min="1" step="1" float="left" display="inline" />
                     </div>
                     </div>
             </div>
