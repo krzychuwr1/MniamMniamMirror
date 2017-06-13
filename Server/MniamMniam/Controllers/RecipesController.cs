@@ -230,12 +230,9 @@ namespace MniamMniam.Controllers
             recipe.TimeNeeded = recipeViewModel.TimeNeeded;
 
             var tags = tagsRepository.GetAllTags().Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
-            if (recipeViewModel.SelectedTags != null)
-            {
-                var tagToAdd = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
-                foreach (var tag in tagToAdd) recipe.Tags.Add(tag);
-            }
-            if(recipeViewModel.SelectedIngredient != null)
+            recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
+            recipe.Ingredients = new List<RecipeIngredient>();
+
             foreach (var pair in recipeViewModel.SelectedIngredient.Zip(recipeViewModel.SelectedIngredientAmount, (ingredient, amount) => new { ingredient, amount }))
             {
                 var ingredient = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == pair.ingredient);
