@@ -205,6 +205,11 @@ namespace MniamMniam.Controllers
             editRecipeViewModel.TimeNeeded = recipe.TimeNeeded;
             editRecipeViewModel.AllIngredients = ingredientsRepository.GetAllIngredients().Select(ing => new SelectListItem() { Text = $"{ing.Name} {ing.Unit}", Value = ing.Id.ToString() });
             editRecipeViewModel.AllTags = tagsRepository.GetAllTags().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() });
+
+            editRecipeViewModel.SelectedTags = recipe.Tags.Select(t => t.TagId).ToArray();
+            editRecipeViewModel.SelectedIngredient = recipe.Ingredients.Select(ing => ing.IngredientId).ToArray();
+            editRecipeViewModel.SelectedIngredientAmount = recipe.Ingredients.Select(ing => ing.Amount).ToArray();
+
             ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
             return View(editRecipeViewModel);
         }
