@@ -1,127 +1,142 @@
 @model MniamMniam.Models.CookBookModels.Recipe
 
-@{
-    ViewData["Title"] = "Details";
-}
-@{var averageScore = Model.Reviews.Select(p => p.Score).DefaultIfEmpty().Average(); }
-<h2>Details</h2>
-
-<div>
-    <h4>Recipe</h4>
-    <hr />
-    @if(@Model.Image != null)
-    {
-        <img src="data:image/png;base64, @Model.Image" alt="Image" />
+    @{
+        ViewData["Title"] = "Details";
     }
+    @{var averageScore = Model.Reviews.Select(p => p.Score).DefaultIfEmpty().Average(); }
+    <h2>Details</h2>
 
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Text)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Text)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Ingredients)
-        </dt>
-        <dd>
-            @foreach (var ing in Model.Ingredients)
+    <div class="col-md-12">
+        <h4>Recipe</h4>
+        <div>
+            @if (ViewBag.IsMyRecipe)
             {
-                @Html.DisplayFor(model => ing.Ingredient.Name)
-                @Html.Raw(" ")
-                @Html.DisplayFor(model => ing.Amount)
-                @Html.DisplayFor(model => ing.Ingredient.Unit)
-                <br />
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
             }
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Tags)
-        </dt>
-        <dd>
-            @string.Join(" ", Model.Tags.Select(tag => tag.Tag.Name))
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ApplicationUser)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ApplicationUser.UserName)
-        </dd>
-        <dt>
-            Score Average
-        </dt>
-        <dd>
-            @averageScore
-        </dd>
-    </dl>
-</div>
-<div>
-    @if (ViewBag.IsMyRecipe)
-    {
-        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
-    }
-    <a asp-action="AddFavourite" asp-route-id="@Model.Id">Add to favourites</a>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
-<h2>Reviews</h2>
-
-<p>
-    <a asp-controller="Reviews" asp-action="Create" asp-route-recipeId="@Model.Id">Create New review</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Score
-            </th>
-            <th>
-                Text
-            </th>
-            <th>
-                Last modification date
-            </th>
-            <th>
-                User
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Reviews)
+            <a asp-action="AddFavourite" asp-route-id="@Model.Id">Add to favourites</a>
+            <a asp-action="Index">Back to List</a>
+        </div>
+        <hr />
+        @if (@Model.Image != null)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Score)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Text)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UpdatedAt)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-                </td>
-                <td>
-                    @if (ViewBag.userId == item.ApplicationUserId)
-                    { 
-                        <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    }
-                    <a asp-controller="Reviews" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    @if (ViewBag.userId == item.ApplicationUserId)
-                    {
-                        <a asp-controller="Reviews" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    }
-                </td>
-            </tr>
+            <img src="data:image/png;base64, @Model.Image" alt="Image" />
         }
-    </tbody>
-</table>
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Text)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Text)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Tags)
+                    </dt>
+                    <dd>
+                        @string.Join(" ", Model.Tags.Select(tag => tag.Tag.Name))
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ApplicationUser)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.ApplicationUser.UserName)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.TimeNeeded)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.TimeNeeded)
+                    </dd>
+                    <dt>
+                        Score Average
+                    </dt>
+                    <dd>
+                        @averageScore
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="cold-md-12">
+            <div class="col-md-4 col-md-offset-1">
+                <label asp-for="Ingredients"></label>
+                <br />
+                @foreach (var ing in Model.Ingredients)
+                {
+                    @Html.DisplayFor(model => ing.Ingredient.Name)
+                    @Html.Raw(" ")
+                    @Html.DisplayFor(model => ing.Amount)
+                    @Html.DisplayFor(model => ing.Ingredient.Unit)
+                    <br />
+                }
+            </div>
+            <div class="col-md-offset-5 cold-md-7">
+                <label asp-for="DetailedText"></label>
+                <br />
+                    <p style="white-space: pre-line">@Model.DetailedText</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cold-md-12">
+        <h2>Reviews</h2>
+
+        <p>
+            <a asp-controller="Reviews" asp-action="Create" asp-route-recipeId="@Model.Id">Create New review</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Score
+                    </th>
+                    <th>
+                        Text
+                    </th>
+                    <th>
+                        Last modification date
+                    </th>
+                    <th>
+                        User
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Reviews)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Score)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Text)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UpdatedAt)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                        </td>
+                        <td>
+                            @if (ViewBag.userId == item.ApplicationUserId)
+                            {
+                                <a asp-controller="Reviews" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            }
+                            <a asp-controller="Reviews" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            @if (ViewBag.userId == item.ApplicationUserId)
+                            {
+                                <a asp-controller="Reviews" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>

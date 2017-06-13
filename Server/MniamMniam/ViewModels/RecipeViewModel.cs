@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using MniamMniam.Models.CookBookModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +13,13 @@ namespace MniamMniam.ViewModels
     {
         public string Name { get; set; }
 
+        [Display(Name="Time")]
+        public int TimeNeeded { get; set; }
+
         public string Text { get; set; }
+
+        [Display(Name="How to prepare")]
+        public string DetailedText { get; set; }
 
         public int[] SelectedTags { get; set; }
 

@@ -146,13 +146,12 @@ namespace MniamMniam.Controllers
                 recipe.UpdatedAt = now;
                 recipe.Name = recipeViewModel.Name;
                 recipe.Text = recipeViewModel.Text;
+                recipe.DetailedText = recipeViewModel.DetailedText;
+                recipe.TimeNeeded = recipeViewModel.TimeNeeded;
               
-
                 var tags = tagsRepository.GetAllTags().Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
                 recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
                 recipe.Ingredients = new List<RecipeIngredient>();
-            
-                // var filePath = "C:\\Users\\Piotr\\Desktop\\tmp\\image.jpg";
 
                 foreach (var formFile in files)
                 {
@@ -165,23 +164,16 @@ namespace MniamMniam.Controllers
                             var fileBytes = ms.ToArray();
                             string Image = Convert.ToBase64String(fileBytes);
                             recipe.Image = Image;
-                            // act on the Base64 data
                         }
-                        /* SAVE IMAGE
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await formFile.CopyToAsync(stream);
-                        }
-                        */
                     }
                 }
             
                 foreach (var pair in recipeViewModel.SelectedIngredient.Zip(recipeViewModel.SelectedIngredientAmount, (ingredient, amount) => new { ingredient, amount }))
                 {
-                    var ingredient1 = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == pair.ingredient);
-                    if (ingredient1 != null)
+                    var ingredient = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == pair.ingredient);
+                    if (ingredient != null)
                     {
-                        recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient1, Amount = pair.amount });
+                        recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient, Amount = pair.amount });
                     }
                 }
                 
