@@ -44,7 +44,7 @@
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Text)
+                            @Html.DisplayFor(modelItem => item.TextTrimmed)
                         </td>
                         <td>
                             @string.Join(" ", item.Tags.Select(tag => tag.Tag.Name))
