@@ -194,13 +194,21 @@ namespace MniamMniam.Controllers
                 return NotFound();
             }
 
+            var editRecipeViewModel = new EditRecipeViewModel();
             var recipe = recipesRepository.GetRecipe(id.Value);
-            if (recipe == null)
-            {
-                return NotFound();
-            }
+            if (recipe == null) return NotFound();
+
+            editRecipeViewModel.Recipe = recipe;
+            editRecipeViewModel.ApplicationUserId = recipe.ApplicationUserId;
+            editRecipeViewModel.Name = recipe.Name;
+            editRecipeViewModel.Text = recipe.Text;
+            editRecipeViewModel.DetailedText = recipe.DetailedText;
+            editRecipeViewModel.TimeNeeded = recipe.TimeNeeded;
+            editRecipeViewModel.AllIngredients = ingredientsRepository.GetAllIngredients().Select(ing => new SelectListItem() { Text = $"{ing.Name} {ing.Unit}", Value = ing.Id.ToString() });
+            editRecipeViewModel.AllTags = tagsRepository.GetAllTags().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() });
+
             ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
-            return View(recipe);
+            return View(editRecipeViewModel);
         }
 
         // POST: Recipes/Edit/5
@@ -208,26 +216,57 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Text,Id")] Recipe recipe)
+        public async Task<IActionResult> Edit(int? id, EditRecipeViewModel recipeViewModel, List<IFormFile> files)
         {
-            if (id != recipe.Id)
+
+            var recipe = recipesRepository.GetRecipe(id.Value);
+            if (recipe == null) return NotFound();
+            recipe.Name = recipeViewModel.Name;
+            recipe.Text = recipeViewModel.Text;
+            recipe.DetailedText = recipeViewModel.DetailedText;
+            recipe.TimeNeeded = recipeViewModel.TimeNeeded;
+
+            var tags = tagsRepository.GetAllTags().Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
+            if (recipeViewModel.SelectedTags != null)
             {
-                return NotFound();
+                var tagToAdd = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
+                foreach (var tag in tagToAdd) recipe.Tags.Add(tag);
+            }
+            if(recipeViewModel.SelectedIngredient != null)
+            foreach (var pair in recipeViewModel.SelectedIngredient.Zip(recipeViewModel.SelectedIngredientAmount, (ingredient, amount) => new { ingredient, amount }))
+            {
+                var ingredient = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == pair.ingredient);
+                if (ingredient != null)
+                {
+                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient, Amount = pair.amount });
+                }
             }
 
-            var oldRecipe = recipesRepository.GetRecipe(id);
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    using (var fileStream = formFile.OpenReadStream())
+                    using (var ms = new MemoryStream())
+                    {
+                        fileStream.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        string Image = Convert.ToBase64String(fileBytes);
+                        recipe.Image = Image;
+                    }
+                }
+            }
 
-            recipe = _mapper.Map(recipe, oldRecipe);
-
+            recipeViewModel.Recipe = recipe;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await recipesRepository.Update(recipe);
+                    await recipesRepository.Update(recipeViewModel.Recipe);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RecipeExists(recipe.Id))
+                    if (!RecipeExists(recipeViewModel.Recipe.Id))
                     {
                         return NotFound();
                     }
@@ -238,8 +277,8 @@ namespace MniamMniam.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
-            return View(recipe);
+            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipeViewModel.ApplicationUserId);
+            return View(recipeViewModel);
         }
 
         private bool RecipeExists(int id)

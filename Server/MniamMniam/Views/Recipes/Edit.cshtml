@@ -1,4 +1,4 @@
-@model MniamMniam.Models.CookBookModels.Recipe
+@model MniamMniam.ViewModels.EditRecipeViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -7,25 +7,81 @@
 <h2>Edit</h2>
 
 <form asp-action="Edit">
-    <div class="form-horizontal">
+    <div class="form-group col-md-12">
         <h4>Recipe</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-        <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Name" class="form-control" maxlength="30"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
+        <div class="form-group col-md-4">
+            <div class="form-group">
+                <label asp-for="Name" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Name" class="form-control" maxlength="30" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Image</label>
+                <div class="col-md-10">
+                    <input type="file" name="files" style="margin-top: 6px;" multiple />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Text" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <textarea asp-for="Text" class="form-control" cols="40" rows="10" maxlength="200"></textarea>
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Tags</label>
+                <div class="col-md-10">
+                    <select asp-for="SelectedTags" class="form-control" asp-items="@Model.AllTags">
+                        <option>Please select tags</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TimeNeeded" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="TimeNeeded" class="form-control" />
+                    <span asp-validation-for="TimeNeeded" class="text-danger"></span>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Text" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <textarea asp-for="Text" class="form-control" cols="40" rows="10"maxlength="200"></textarea>
-                <span asp-validation-for="Text" class="text-danger"></span>
+
+        <div class="col-md-3">
+            <div id="ingredientsList">
+                <label class="control-label col-md-offset-3">Ingredients</label>
+                <div class="form-group" id="firstIngredient">
+                    <div class="col-md-10">
+                        <select asp-for="SelectedIngredient" class="form-control" asp-items="@Model.AllIngredients" id="testoweId">
+                            <option>Please select one</option>
+                        </select>
+                        <input asp-for="SelectedIngredientAmount" class="form-control" min="1" step="1" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-0 col-md-10">
+                    <input type="button" id="anotherIngredient" value="Add another ingredient" class="btn btn-default" />
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group col-md-5">
+            <label asp-for="DetailedText" class="control-label col-md-offset-1"></label>
+            <div class="col-md-12">
+                <textarea asp-for="DetailedText" class="form-control" cols="100" rows="20"></textarea>
+                <span asp-validation-for="DetailedText" class="text-danger"></span>
             </div>
         </div>
+
+    </div>
     <input type="hidden" asp-for="ApplicationUserId" />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
