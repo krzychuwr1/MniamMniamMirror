@@ -240,7 +240,7 @@ namespace MniamMniam.Controllers
                 }
             }
 
-            foreach (var formFile in filess)
+            foreach (var formFile in files)
             {
                 if (formFile.Length > 0)
                 {
