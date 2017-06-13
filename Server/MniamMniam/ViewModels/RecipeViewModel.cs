@@ -59,9 +59,9 @@ namespace MniamMniam.ViewModels
 
         public int[] SelectedIngredientAmount { get; set; }
 
-        public IFormFile file { get; set; }
+        //public IFormFile File { get; set; }
 
-        public List<IFormFile> files { get; set; }
+        //public List<IFormFile> files { get; set; }
 
         public IEnumerable<SelectListItem> AllTags { get; set; }
 
