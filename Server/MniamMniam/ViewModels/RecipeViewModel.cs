@@ -67,5 +67,6 @@ namespace MniamMniam.ViewModels
 
         public IEnumerable<SelectListItem> AllIngredients { get; set; }
 
+
     }
 }

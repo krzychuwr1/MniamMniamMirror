@@ -199,14 +199,12 @@ namespace MniamMniam.Controllers
             if (recipe == null) return NotFound();
 
             editRecipeViewModel.Recipe = recipe;
-            editRecipeViewModel.ApplicationUserId = recipe.ApplicationUserId;
             editRecipeViewModel.Name = recipe.Name;
             editRecipeViewModel.Text = recipe.Text;
             editRecipeViewModel.DetailedText = recipe.DetailedText;
             editRecipeViewModel.TimeNeeded = recipe.TimeNeeded;
             editRecipeViewModel.AllIngredients = ingredientsRepository.GetAllIngredients().Select(ing => new SelectListItem() { Text = $"{ing.Name} {ing.Unit}", Value = ing.Id.ToString() });
             editRecipeViewModel.AllTags = tagsRepository.GetAllTags().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() });
-
             ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
             return View(editRecipeViewModel);
         }
@@ -242,7 +240,7 @@ namespace MniamMniam.Controllers
                 }
             }
 
-            foreach (var formFile in files)
+            foreach (var formFile in filess)
             {
                 if (formFile.Length > 0)
                 {
@@ -257,29 +255,31 @@ namespace MniamMniam.Controllers
                 }
             }
 
+            var now = DateTime.Now;
+            recipe.UpdatedAt = now;
+
             recipeViewModel.Recipe = recipe;
-            if (ModelState.IsValid)
+          
+
+            try
             {
-                try
-                {
-                    await recipesRepository.Update(recipeViewModel.Recipe);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RecipeExists(recipeViewModel.Recipe.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
+                await recipesRepository.Update(recipeViewModel.Recipe);
             }
-            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipeViewModel.ApplicationUserId);
-            return View(recipeViewModel);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RecipeExists(recipeViewModel.Recipe.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Index");
         }
+
+        
 
         private bool RecipeExists(int id)
         {
