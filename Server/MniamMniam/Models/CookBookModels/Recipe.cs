@@ -45,15 +45,5 @@ namespace MniamMniam.Models.CookBookModels
         public List<RecipeTag> Tags { get; set; }
         
         public string Image { get; set; }
-
-        public string TextTrimmed
-        {
-            get
-            {
-                if (Text.Length > 50)
-                    return Text.Substring(0, 50) + "...";
-                return Text;
-            }
-        }
     }
 }
