@@ -194,13 +194,24 @@ namespace MniamMniam.Controllers
                 return NotFound();
             }
 
+            var editRecipeViewModel = new EditRecipeViewModel();
             var recipe = recipesRepository.GetRecipe(id.Value);
-            if (recipe == null)
-            {
-                return NotFound();
-            }
+            if (recipe == null) return NotFound();
+
+            editRecipeViewModel.Recipe = recipe;
+            editRecipeViewModel.Name = recipe.Name;
+            editRecipeViewModel.Text = recipe.Text;
+            editRecipeViewModel.DetailedText = recipe.DetailedText;
+            editRecipeViewModel.TimeNeeded = recipe.TimeNeeded;
+            editRecipeViewModel.AllIngredients = ingredientsRepository.GetAllIngredients().Select(ing => new SelectListItem() { Text = $"{ing.Name} {ing.Unit}", Value = ing.Id.ToString() });
+            editRecipeViewModel.AllTags = tagsRepository.GetAllTags().Select(tag => new SelectListItem() { Text = tag.Name, Value = tag.Id.ToString() });
+
+            editRecipeViewModel.SelectedTags = recipe.Tags.Select(t => t.TagId).ToArray();
+            editRecipeViewModel.SelectedIngredient = recipe.Ingredients.Select(ing => ing.IngredientId).ToArray();
+            editRecipeViewModel.SelectedIngredientAmount = recipe.Ingredients.Select(ing => ing.Amount).ToArray();
+
             ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
-            return View(recipe);
+            return View(editRecipeViewModel);
         }
 
         // POST: Recipes/Edit/5
@@ -208,39 +219,69 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Text,Id")] Recipe recipe)
+        public async Task<IActionResult> Edit(int? id, EditRecipeViewModel recipeViewModel, List<IFormFile> files)
         {
-            if (id != recipe.Id)
+
+            var recipe = recipesRepository.GetRecipe(id.Value);
+            if (recipe == null) return NotFound();
+            recipe.Name = recipeViewModel.Name;
+            recipe.Text = recipeViewModel.Text;
+            recipe.DetailedText = recipeViewModel.DetailedText;
+            recipe.TimeNeeded = recipeViewModel.TimeNeeded;
+
+            var tags = tagsRepository.GetAllTags().Where(tag => recipeViewModel.SelectedTags.Contains(tag.Id));
+            recipe.Tags = tags.Select(tag => new RecipeTag() { Recipe = recipe, Tag = tag }).ToList();
+            recipe.Ingredients = new List<RecipeIngredient>();
+
+            foreach (var pair in recipeViewModel.SelectedIngredient.Zip(recipeViewModel.SelectedIngredientAmount, (ingredient, amount) => new { ingredient, amount }))
             {
-                return NotFound();
+                var ingredient = ingredientsRepository.GetAllIngredients().FirstOrDefault(ing => ing.Id == pair.ingredient);
+                if (ingredient != null)
+                {
+                    recipe.Ingredients.Add(new RecipeIngredient() { Recipe = recipe, Ingredient = ingredient, Amount = pair.amount });
+                }
             }
 
-            var oldRecipe = recipesRepository.GetRecipe(id);
-
-            recipe = _mapper.Map(recipe, oldRecipe);
-
-            if (ModelState.IsValid)
+            foreach (var formFile in files)
             {
-                try
+                if (formFile.Length > 0)
                 {
-                    await recipesRepository.Update(recipe);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RecipeExists(recipe.Id))
+                    using (var fileStream = formFile.OpenReadStream())
+                    using (var ms = new MemoryStream())
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        fileStream.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        string Image = Convert.ToBase64String(fileBytes);
+                        recipe.Image = Image;
                     }
                 }
-                return RedirectToAction("Index");
             }
-            ViewData["ApplicationUserId"] = new SelectList(usersRepository.GetAllUsers(), "Id", "Id", recipe.ApplicationUserId);
-            return View(recipe);
+
+            var now = DateTime.Now;
+            recipe.UpdatedAt = now;
+
+            recipeViewModel.Recipe = recipe;
+          
+
+            try
+            {
+                await recipesRepository.Update(recipeViewModel.Recipe);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RecipeExists(recipeViewModel.Recipe.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Index");
         }
+
+        
 
         private bool RecipeExists(int id)
         {
