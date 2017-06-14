@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using MniamMniam.Data;
 using MniamMniam.Models.CookBookModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using MniamMniam.Models;
 
 namespace MniamMniam.Controllers
 {
@@ -16,9 +18,12 @@ namespace MniamMniam.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public ReviewsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public ReviewsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Reviews
@@ -81,7 +86,9 @@ namespace MniamMniam.Controllers
                     .Include(rec => rec.ApplicationUser)
                     .FirstOrDefaultAsync(rec => rec.Id == recipeId);
 
-                review.ApplicationUserId = recipe.ApplicationUserId;
+                review.ApplicationUserId = _userManager.GetUserId(HttpContext.User);
+                review.ApplicationUser = await _userManager.GetUserAsync(HttpContext.User);
+
                 review.RecipeId = recipe.Id;
                 review.CreatedAt = DateTime.Now;
                 review.UpdatedAt = DateTime.Now;

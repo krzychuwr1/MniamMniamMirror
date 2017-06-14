@@ -78,7 +78,7 @@ namespace MniamMniam.Repositories
 
         public Recipe GetRecipe(int id) => getAllRecipes().FirstOrDefault(rec => rec.Id == id);
 
-        public Recipe GetRecipeWithReviews(int id) => getAllRecipes().Include(rec => rec.Reviews).FirstOrDefault(rec => rec.Id == id);
+        public Recipe GetRecipeWithReviews(int id) => getAllRecipes().Include(rec => rec.Reviews).ThenInclude(rev => rev.ApplicationUser).FirstOrDefault(rec => rec.Id == id);
 
         public async Task Remove(int id)
         {
