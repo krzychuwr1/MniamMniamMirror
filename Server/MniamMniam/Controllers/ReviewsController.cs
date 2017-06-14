@@ -123,18 +123,18 @@ namespace MniamMniam.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Score,Text,UpdatedAt")] Review review)
+        public async Task<IActionResult> Edit(int id, [Bind("Score,Text")] Review review)
         {
-            if (id != review.Id)
-            {
-                return NotFound();
-            }
+            var oldReview = _context.Reviews.Include(rev => rev.ApplicationUser).Include(rev => rev.Recipe).FirstOrDefault(rev => rev.Id == id);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(review);
+                    oldReview.Text = review.Text;
+                    oldReview.Score = review.Score;
+                    oldReview.UpdatedAt = DateTime.Now;
+                    //_context.Update(review);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
