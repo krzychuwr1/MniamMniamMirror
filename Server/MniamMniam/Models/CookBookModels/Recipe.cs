@@ -18,8 +18,10 @@ namespace MniamMniam.Models.CookBookModels
 
         public string Text { get; set; }
 
+        [Display(Name="How to prepare")]
         public string DetailedText { get; set; }
 
+        [Display(Name="Time")]
         public int TimeNeeded { get; set; }
 
         [ScaffoldColumn(false)]
