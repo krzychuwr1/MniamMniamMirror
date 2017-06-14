@@ -349,7 +349,9 @@ namespace MniamMniam.Controllers
 
         public async Task<IActionResult> RemoveFavourite(int? id)
         {
-            await favouriteRecipesRepository.Remove(id.Value);
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var favouriteRecipe = favouriteRecipesRepository.GetAllFavouriteRecipes().FirstOrDefault(rec => rec.ApplicationUserId == userId && rec.RecipeId == id);
+            await favouriteRecipesRepository.Remove(favouriteRecipe.Id);
             return RedirectToAction(nameof(FavouriteRecipes));
         }
 
